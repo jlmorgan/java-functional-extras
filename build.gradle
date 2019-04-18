@@ -1,0 +1,124 @@
+plugins {
+  id "checkstyle"
+  id "jacoco"
+  id "java-library"
+  id "maven-publish"
+  id "signing"
+}
+
+group = "com.github.jlmorgan"
+version = new File("${rootDir}/.meta/VERSION").text.trim()
+
+allprojects {
+  apply plugin: "checkstyle"
+  apply plugin: "jacoco"
+  apply plugin: "java-library"
+
+  sourceCompatibility = JavaVersion.VERSION_1_8
+  targetCompatibility = JavaVersion.VERSION_1_8
+
+  buildscript {
+    repositories {
+      mavenCentral()
+    }
+
+    wrapper {
+      gradleVersion = "5.4.1"
+      distributionType = Wrapper.DistributionType.ALL
+    }
+  }
+
+  dependencies {
+    compile "org.jetbrains:annotations:15.0"
+
+    // Test
+    testCompile "de.bechte.junit:junit-hierarchicalcontextrunner:4.12.2"
+    testCompile "junit:junit:5.4.2"
+    testCompile "org.hamcrest:hamcrest-library:2.1"
+    testCompile "org.mockito:mockito-core:2.27.4"
+  }
+
+  repositories {
+    jcenter()
+    mavenCentral()
+    mavenLocal()
+  }
+
+  task javadocJar(type: Jar) {
+    archiveClassifier = "javadoc"
+
+    from javadoc
+  }
+
+  task sourcesJar(type: Jar) {
+    archiveClassifier = "sources"
+
+    from sourceSets.main.allJava
+  }
+}
+
+javadoc {
+  if (JavaVersion.current().isJava8Compatible()) {
+    options.addBooleanOption("html5", true)
+  }
+}
+
+publishing {
+  publications {
+    mavenJava(MavenPublication) {
+      artifactId = "functional-extras"
+
+      artifact javadocJar
+      artifact sourcesJar
+      from components.java
+
+      pom {
+        description = "A collection of functional extras for Java."
+        name = "Functional Extras"
+        url = "https://github.com/jlmorgan/java-functional-extras"
+
+        licenses {
+          license {
+            name = "The MIT License"
+            url = "https://opensource.org/licenses/MIT"
+          }
+        }
+
+        developers {
+          developer {
+            email = "justin.l.morgan@gmail.com"
+            id = "jlmorgan"
+            name = "Justin Morgan"
+          }
+        }
+
+        scm {
+          connection = "git@github.com:jlmorgan/java-functional-extras.git"
+          url = "https://github.com/jlmorgan/java-functional-extras"
+        }
+      }
+
+      versionMapping {
+        usage("java-api") {
+          fromResolutionOf("runtimeClasspath")
+        }
+
+        usage("java-runtime") {
+          fromResolutionResult()
+        }
+      }
+    }
+  }
+
+  repositories {
+    maven {
+      def releasesRepoUrl = "${buildDir}/repos/releases"
+      def snapshotsRepoUrl = "${buildDir}/repos/snapshots"
+      url = version.endsWith("SNAPSHOT") ? snapshotsRepoUrl : releasesRepoUrl
+    }
+  }
+}
+
+signing {
+  sign publishing.publications.mavenJava
+}
