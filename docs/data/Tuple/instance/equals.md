@@ -15,6 +15,8 @@ Determine whether or not the `other` has the same value as the current `instance
 
 * `(boolean)`: `true` for equality; otherwise, `false`.
 
+## Examples
+
 ```java
 Tuple<String, Integer> tuple = Tuple.of("a", 1);
 

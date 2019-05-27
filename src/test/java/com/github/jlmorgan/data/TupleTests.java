@@ -101,7 +101,7 @@ class TupleTests {
     @Nested
     class DescribeHashCode {
       @Test
-      void shouldReturnFalseForDifferingFirstValues() {
+      void shouldReturnDifferingHashCodeForDifferingFirstValues() {
         final Tuple<UUID, UUID> testTuple1 = Tuple.of(UUID.randomUUID(), _testSecondValue);
         final Tuple<UUID, UUID> testTuple2 = Tuple.of(UUID.randomUUID(), _testSecondValue);
 
@@ -109,7 +109,7 @@ class TupleTests {
       }
 
       @Test
-      void shouldReturnFalseForDifferingSecondValues() {
+      void shouldReturnDifferingHashCodeForDifferingSecondValues() {
         final Tuple<UUID, UUID> testTuple1 = Tuple.of(_testFirstValue, UUID.randomUUID());
         final Tuple<UUID, UUID> testTuple2 = Tuple.of(_testFirstValue, UUID.randomUUID());
 
@@ -117,7 +117,7 @@ class TupleTests {
       }
 
       @Test
-      void shouldReturnTrueForSameValues() {
+      void shouldReturnSameHashCodeForSameValues() {
         final Tuple<UUID, UUID> testTuple1 = Tuple.of(_testFirstValue, _testSecondValue);
         final Tuple<UUID, UUID> testTuple2 = Tuple.of(_testFirstValue, _testSecondValue);
 

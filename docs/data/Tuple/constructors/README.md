@@ -1,4 +1,4 @@
-# Tuple Static Methods
+# Tuple Constructors
 
 ## Table of Contents
 

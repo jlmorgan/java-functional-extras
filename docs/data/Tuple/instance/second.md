@@ -11,6 +11,8 @@ The second element.
 
 * `(A)`: The second element.
 
+## Examples
+
 ```java
 Tuple<String, Integer> tuple = Tuple.of("a", 1);
 
