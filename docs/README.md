@@ -2,5 +2,5 @@
 
 ## Table of Contents
 
-* [Data](./data)
-    * [Functions](./data/Functions.md)
+* [`data`](./data)
+    * [`Functions`](./data/Functions.md)

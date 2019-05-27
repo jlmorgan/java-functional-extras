@@ -49,6 +49,7 @@ class FunctionsTests {
       final UUID testValue = UUID.randomUUID();
       final String testSecondValue = "test";
       final Function<String, UUID> testFunction = constant(testValue);
+      // noinspection UnnecessaryLocalVariable
       final UUID expectedResult = testValue;
       final UUID actualResult = testFunction.apply(testSecondValue);
 
@@ -86,6 +87,7 @@ class FunctionsTests {
     @Test
     void shouldReturnValue() {
       final UUID testValue = UUID.randomUUID();
+      // noinspection UnnecessaryLocalVariable
       final UUID expectedResult = testValue;
       final UUID actualResult = id(testValue);
 
