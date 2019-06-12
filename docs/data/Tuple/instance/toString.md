@@ -11,9 +11,11 @@ Converts the `instance` to a `String` representation.
 
 * `(String)`: The `instance` as a `String`.
 
+## Examples
+
 ```java
 Tuple<String, Integer> tuple = Tuple.of("a", 1);
 
 tuple.toString();
-// => 'Tuple(1, "a")'
+// => "Tuple(a, 1)"
 ```

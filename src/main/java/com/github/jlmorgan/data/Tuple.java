@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * An arbitrary pair of values.
+ * A finite ordered sequence of elements.
  * @param <A> The {@code first} type parameter.
  * @param <B> The {@code second} type parameter.
  */

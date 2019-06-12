@@ -1,6 +1,10 @@
-# `of<A, B>(A first, B second) | of<A, B>(A first).apply(B second)`
+# `Tuple.<A, B>of(A first, B second)`
 
 Creates a `Tuple` with two values.
+
+## Alternatives
+
+* `Tuple.<A, B>of(A first).apply(B second)`
 
 ## Arguments
 
@@ -19,9 +23,9 @@ Creates a `Tuple` with two values.
 ## Example
 
 ```java
-Tuple.of<String, int>("a").apply(1);
-// => Tuple<String, int>("a", 1)
+Tuple.<String, int>of("a").apply(1);
+// => Tuple(a, 1)
 
-Tuple.of<String, int>("b", 2);
-// => Tuple<String, int>("b", 2)
+Tuple.<String, int>of("b", 2);
+// => Tuple(b, 2)
 ```

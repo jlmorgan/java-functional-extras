@@ -1,12 +1,13 @@
 # Tuple
 
-A finite order sequence of elements.
+A finite ordered sequence of elements.
 
 ## Table of Contents
 
 * [Interface](./Tuple.md)
-* Methods
-    * [`.of`](./static/of.md)
+* [Constructors](./constructors)
+    * [`.of`](./constructors/of.md)
+* [Instance Methods](./instance)
     * [`#equals`](./instance/equals.md)
     * [`#first`](./instance/first.md)
     * [`#hashCode`](./instance/hashCode.md)

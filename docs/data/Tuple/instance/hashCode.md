@@ -1,4 +1,4 @@
-# `Tuple<A, B>#hasCode()`
+# `Tuple<A, B>#hashCode()`
 
 Generates a hash code representing the underlying values of the `Tuple`.
 

@@ -11,6 +11,8 @@ Creates a new `Tuple` with swapped values.
 
 * `(Tuple<B, A>)`: The swapped `Tuple`.
 
+## Examples
+
 ```java
 Tuple<String, Integer> tuple = Tuple.of("a", 1);
 

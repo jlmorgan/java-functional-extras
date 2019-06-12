@@ -11,6 +11,8 @@ The first element.
 
 * `(A)`: The first element.
 
+## Examples
+
 ```java
 Tuple<String, Integer> tuple = Tuple.of("a", 1);
 
