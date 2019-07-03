@@ -1,4 +1,4 @@
-# `Maybe<A>#isJust()`
+# `Maybe#<A>isJust()`
 
 Determines whether or not the `Maybe` is a `Just`.
 

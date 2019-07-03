@@ -1,4 +1,4 @@
-# `Maybe<A>#equals(Object other)`
+# `Maybe#<A>equals(Object other)`
 
 Determine whether or not the `other` has the same value as the current `instance`.
 

@@ -43,7 +43,7 @@ public interface Maybe<A> {
     return Optional.ofNullable(maybe)
       .filter(Maybe::isJust)
       .map(just -> ((Just<V>) just)._value)
-      .orElseThrow(() -> new IllegalArgumentException("maybeMap must not be null or Nothing"));
+      .orElseThrow(() -> new IllegalArgumentException("maybe must not be null or Nothing"));
   }
 
   /**
@@ -138,7 +138,7 @@ public interface Maybe<A> {
   @NotNull
   @Contract(pure = true)
   static <V, R> Function<Function<V, R>, Function<Maybe<V>, R>> maybeMap(final R defaultValue) {
-    return morphism -> instance -> maybeMap(defaultValue, morphism).apply(instance);
+    return morphism -> maybeMap(defaultValue, morphism);
   }
 
   /**
