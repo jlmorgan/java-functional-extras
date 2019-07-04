@@ -1,6 +1,6 @@
 # `Tuple<A, B>#equals(Object other)`
 
-Determine whether or not the `other` has the same value as the current `instance`.
+Determines whether or not the `other` has the same value as the current `instance`.
 
 ## Arguments
 

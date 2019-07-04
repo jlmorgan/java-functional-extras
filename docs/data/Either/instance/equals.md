@@ -1,6 +1,6 @@
 # `Either#<A, B>equals(Object other)`
 
-Determine whether or not the `other` has the same value as the current `instance`.
+Determines whether or not the `other` has the same value as the current `instance`.
 
 ## Arguments
 
@@ -18,8 +18,8 @@ Determine whether or not the `other` has the same value as the current `instance
 ## Examples
 
 ```java
-const left = Either.<String, String>Left("a");
-const right = Either.<String, String>Right("a");
+Either<String, String> left = Either.<String, String>Left("a");
+Either<String, String> right = Either.<String, String>Right("a");
 
 right.equals("a");
 // => false
