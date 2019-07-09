@@ -1,4 +1,4 @@
-# `Maybe<A>#toString()`
+# `Maybe#<A>toString()`
 
 Converts the `instance` to a `String` representation.
 

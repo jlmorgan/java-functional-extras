@@ -348,16 +348,16 @@ class MaybeTests {
     class DescribeHashCode {
       @Test
       void shouldReturnDifferingHashCodeForDifferingValues() {
-        final Maybe<UUID> testMaybe2 = Maybe.just(UUID.randomUUID());
+        final Maybe<UUID> testOther = Maybe.just(UUID.randomUUID());
 
-        assertNotEquals(_testMaybe.hashCode(), testMaybe2.hashCode());
+        assertNotEquals(_testMaybe.hashCode(), testOther.hashCode());
       }
 
       @Test
       void shouldReturnSameHashCodeForSameValues() {
-        final Maybe<UUID> testMaybe2 = Maybe.just(_testValue);
+        final Maybe<UUID> testOther = Maybe.just(_testValue);
 
-        assertEquals(_testMaybe.hashCode(), testMaybe2.hashCode());
+        assertEquals(_testMaybe.hashCode(), testOther.hashCode());
       }
     }
 

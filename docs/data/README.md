@@ -2,6 +2,19 @@
 
 ## Table of Contents
 
+* [`Either`](./Either)
+    * [`.left`](./Either/constructors/left.md)
+    * [`.right`](./Either/constructors/right.md)
+    * [`.eitherMap`](./Either/static/eitherMap.md)
+    * [`.fromLeft`](./Either/static/fromLeft.md)
+    * [`.fromRight`](./Either/static/fromRight.md)
+    * [`.lefts`](./Either/static/lefts.md)
+    * [`.partitionEithers`](./Either/static/partitionEithers.md)
+    * [`.rights`](./Either/static/rights.md)
+    * [`#equals`](./Either/instance/equals.md)
+    * [`#isLeft`](./Either/instance/isLeft.md)
+    * [`#isRight`](./Either/instance/isRight.md)
+    * [`#toString`](./Either/instance/toString.md)
 * [`Functions`](./Functions)
     * [`.compose`](./Functions/compose.md)
     * [`.const`](./Functions/const.md)

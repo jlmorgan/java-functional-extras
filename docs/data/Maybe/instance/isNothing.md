@@ -1,4 +1,4 @@
-# `Maybe<A>#isNothing()`
+# `Maybe#<A>isNothing()`
 
 Determines whether or not the `Maybe` is a `Nothing`.
 

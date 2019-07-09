@@ -1,4 +1,4 @@
-# `Maybe<A>#hashCode()`
+# `Maybe#<A>hashCode()`
 
 Generates a hash code representing the underlying values of the `Maybe`.
 
