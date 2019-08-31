@@ -225,7 +225,7 @@ public interface Maybe<A> {
     }
 
     /**
-     * Determine whether or not the {@code other} has the same value as the current {@code instance}.
+     * Determines whether or not the {@code other} has the same value as the current {@code instance}.
      * @param other The other object.
      * @return {@code true} for equality; otherwise, {@code false}.
      */
@@ -283,7 +283,7 @@ public interface Maybe<A> {
     Nothing() {}
 
     /**
-     * Determine whether or not the {@code other} is a {@code Nothing}.
+     * Determines whether or not the {@code other} is a {@code Nothing}.
      * @param other The other object.
      * @return {@code true} for equality; otherwise, {@code false}.
      */

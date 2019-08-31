@@ -7,3 +7,4 @@
     * [`Functions`](./data/Functions/)
     * [`Maybe`](./data/Maybe)
     * [`Tuple`](./data/Tuple)
+    * [`Validation`](./data/Validation)

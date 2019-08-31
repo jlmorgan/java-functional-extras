@@ -4,7 +4,7 @@ The `K` combinator. Creates a unary function that ignores the input value and re
 
 ## Arguments
 
-* `a (A)`: A value.
+* `a (A)`: The value.
 
 ## Types
 

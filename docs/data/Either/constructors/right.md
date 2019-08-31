@@ -4,7 +4,7 @@ Encapsulates a right value.
 
 ## Arguments
 
-* `value (R)`: A value.
+* `value (R)`: The value.
 
 ## Types
 
