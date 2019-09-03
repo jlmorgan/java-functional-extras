@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface Maybe<A> {
   /**
-   * Takes a list of {@link Maybe} and returns a list of the {@code Just} values.
+   * Takes a list of {@link Maybe} and a list of the {@code Just} values.
    * @param list List of {@link Maybe}.
    * @param <V> The underlying type.
    * @return A list of the {@code Just} values.
@@ -176,7 +176,7 @@ public interface Maybe<A> {
   }
 
   /**
-   * Returns an empty list for {@code Nothing}; otherwise, a singleton list of the underlying value of the {@code Just}.
+   * An empty list for {@code Nothing}; otherwise, a singleton list of the underlying value of the {@code Just}.
    * @param maybe The {@link Maybe}.
    * @param <V> The underlying type.
    * @return A singleton list of the underlying value within the {@code maybeMap} for a {@code Just}; otherwise, an

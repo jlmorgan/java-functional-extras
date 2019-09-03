@@ -16,7 +16,7 @@ public final class Functions {
    * @param <A> Input type to the first function ({@code f}) in the composition.
    * @param <B> Output type of the first function ({@code f}) and input type to the second ({@code g}).
    * @param <C> Output type of the second function ({@code g}).
-   * @return Returns a function that maps a value of type {@code A} to type {@code C}.
+   * @return A function that maps a value of type {@code A} to type {@code C}.
    */
   @NotNull
   @Contract(pure = true)
@@ -31,7 +31,7 @@ public final class Functions {
    * @param <A> Input type to the first function ({@code f}) in the composition.
    * @param <B> Output type of the first function ({@code f}) and input type to the second ({@code g}).
    * @param <C> Output type of the second function ({@code g}).
-   * @return Returns a function that maps a value of type {@code A} to type {@code C}.
+   * @return A function that maps a value of type {@code A} to type {@code C}.
    */
   @NotNull
   @Contract(pure = true)
@@ -47,7 +47,7 @@ public final class Functions {
    * @param a The return value of the unary function.
    * @param <A> The constant type parameter.
    * @param <B> The ignored type parameter.
-   * @return Returns a unary function that takes a value of type {@code B} and returns the original value of type
+   * @return A unary function that takes a value of type {@code B} and returns the original value of type
    * {@code A}.
    */
   @NotNull
@@ -105,7 +105,7 @@ public final class Functions {
    * @param <A> Input type to the first function ({@code f}) in the composition.
    * @param <B> Output type of the first function ({@code f}) and input type to the second ({@code g}).
    * @param <C> Output type of the second function ({@code g}).
-   * @return Returns a function that maps a value of type {@code A} to type {@code C}.
+   * @return A function that maps a value of type {@code A} to type {@code C}.
    */
   @NotNull
   @Contract(pure = true)
@@ -120,7 +120,7 @@ public final class Functions {
    * @param <A> Input type to the first function ({@code f}) in the composition.
    * @param <B> Output type of the first function ({@code f}) and input type to the second ({@code g}).
    * @param <C> Output type of the second function ({@code g}).
-   * @return Returns a function that maps a value of type {@code A} to type {@code C}.
+   * @return A function that maps a value of type {@code A} to type {@code C}.
    */
   @NotNull
   @Contract(pure = true)

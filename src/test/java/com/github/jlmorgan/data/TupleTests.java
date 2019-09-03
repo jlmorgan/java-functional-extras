@@ -2,7 +2,10 @@ package com.github.jlmorgan.data;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Random;
 import java.util.UUID;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -21,6 +24,54 @@ class TupleTests {
       void shouldMatchUnCurriedResult() {
         final Tuple<UUID, UUID> expectedResult = Tuple.of(_testFirstValue, _testSecondValue);
         final Tuple<UUID, UUID> actualResult = Tuple.<UUID, UUID>of(_testFirstValue).apply(_testSecondValue);
+
+        assertEquals(expectedResult, actualResult);
+      }
+    }
+
+    @Nested
+    class DescribeTupleMap {
+      private final Supplier<Integer> _randomInt = () -> new Random().nextInt(11); // 0..10
+
+      @Test
+      void shouldThrowAnExceptionForNullFirstMorphism() {
+        final Function<Integer, Integer> testFirstMorphism = null;
+        final Function<Integer, Integer> testSecondMorphism = value -> value + 2;
+        final int testValue = _randomInt.get();
+
+        // noinspection ConstantConditions
+        assertThrows(
+          NullPointerException.class,
+          () -> Tuple.<Integer, Integer, Integer>tupleMap(testFirstMorphism)
+            .apply(testSecondMorphism)
+            .apply(testValue)
+        );
+      }
+
+      @Test
+      void shouldThrowAnExceptionForNullSecondMorphism() {
+        final Function<Integer, Integer> testFirstMorphism = value -> value + 1;
+        final Function<Integer, Integer> testSecondMorphism = null;
+        final int testValue = _randomInt.get();
+
+        // noinspection ConstantConditions
+        assertThrows(
+          NullPointerException.class,
+          () -> Tuple.<Integer, Integer, Integer>tupleMap(testFirstMorphism)
+            .apply(testSecondMorphism)
+            .apply(testValue)
+        );
+      }
+
+      @Test
+      void shouldReturnTupleOfMappedValues() {
+        final Function<Integer, Integer> testFirstMorphism = value -> value + 1;
+        final Function<Integer, Integer> testSecondMorphism = value -> value + 2;
+        final int testValue = _randomInt.get();
+        final Tuple<Integer, Integer> expectedResult = Tuple.of(testValue + 1, testValue + 2);
+        final Tuple<Integer, Integer> actualResult = Tuple.<Integer, Integer, Integer>tupleMap(testFirstMorphism)
+          .apply(testSecondMorphism)
+          .apply(testValue);
 
         assertEquals(expectedResult, actualResult);
       }
