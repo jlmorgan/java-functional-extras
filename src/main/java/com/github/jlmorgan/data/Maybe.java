@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.jetbrains.annotations.Contract;
@@ -200,6 +201,15 @@ public interface Maybe<A> {
   }
 
   /**
+   * Tests the underlying value against the {@code predicate}, returning the {@code Just} of the value for {@code true};
+   * otherwise, {@code Nothing}.
+   * @param predicate The predicate with which to test the value.
+   * @return The {@code Just} of the value for {@code true}; otherwise, {@code Nothing}.
+   * @throws NullPointerException if the {@code predicate} is {@code null}.
+   */
+  Maybe<A> filter(Predicate<A> predicate);
+
+  /**
    * Determines whether or not the {@link Maybe} is a {@code Just}.
    * @return {@code true} for a {@code Just}; otherwise, {@code false}.
    */
@@ -243,6 +253,19 @@ public interface Maybe<A> {
       }
 
       return result;
+    }
+
+    /**
+     * Tests the underlying value against the {@code predicate}, returning the {@code Just} of the value for
+     * {@code true}; otherwise, {@code Nothing}.
+     * @param predicate The predicate with which to test the value.
+     * @return The {@code Just} of the value for {@code true}; otherwise, {@code Nothing}.
+     * @throws NullPointerException if the {@code predicate} is {@code null}.
+     */
+    public Maybe<A> filter(final Predicate<A> predicate) {
+      return requireNonNull(predicate, "predicate must not be null").test(_value)
+        ? this
+        : nothing();
     }
 
     /**
@@ -291,6 +314,16 @@ public interface Maybe<A> {
     @Override
     public boolean equals(final Object other) {
       return this == other;
+    }
+
+    /**
+     * Tests the underlying value against the {@code predicate}, returning the {@code Just} of the value for
+     * {@code true}; otherwise, {@code Nothing}.
+     * @param predicate The predicate with which to test the value.
+     * @return The {@code Just} of the value for {@code true}; otherwise, {@code Nothing}.
+     */
+    public Maybe<A> filter(final Predicate<A> predicate) {
+      return this;
     }
 
     /**

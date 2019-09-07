@@ -25,6 +25,9 @@
 
 ## Instance Methods
 
+Instance methods that accept an argument have curried implementations provided by the `Maybes` class where the instance is always the last argument.
+
+* `Maybe<A> filter(Predicate<A> predicate)`: Tests the underlying value against the `predicate`, returning the `Just` of the value for `true`; otherwise, `Nothing`.
 * `boolean isJust()`: Determines whether or not the `Maybe` is a `Just`.
 * `boolean isNothing()`: Determines whether or not the `Maybe` is a `Nothing`.
 
