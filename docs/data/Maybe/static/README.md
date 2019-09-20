@@ -9,3 +9,4 @@
 * [`.mapMaybe`](./mapMaybe.md)
 * [`.maybeMap`](./maybeMap.md)
 * [`.maybeToList`](./maybeToList.md)
+* [`.of`](./of.md)

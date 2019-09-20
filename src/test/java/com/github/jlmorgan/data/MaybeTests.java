@@ -288,6 +288,27 @@ class MaybeTests {
         assertEquals(expectedResult, actualResult);
       }
     }
+
+    @Nested
+    class DescribeOf {
+      @Test
+      void shouldReturnNothingForNull() {
+        final Object testValue = null;
+        final Maybe<Object> expectedResult = Maybe.nothing();
+        final Maybe<Object> actualResult = Maybe.of(testValue);
+
+        assertEquals(expectedResult, actualResult);
+      }
+
+      @Test
+      void shouldReturnJustOfValueForSomeValue() {
+        final int testValue = 0;
+        final Maybe<Integer> expectedResult = Maybe.just(testValue);
+        final Maybe<Integer> actualResult = Maybe.of(testValue);
+
+        assertEquals(expectedResult, actualResult);
+      }
+    }
   }
 
   @Nested

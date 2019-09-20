@@ -1,5 +1,6 @@
 package com.github.jlmorgan.data;
 
+import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
 
 import java.util.*;
@@ -198,6 +199,20 @@ public interface Maybe<A> {
   @SuppressWarnings("unchecked")
   static <V> Maybe<V> nothing() {
     return (Maybe<V>) Nothing.INSTANCE;
+  }
+
+  /**
+   * Creates a {@link Maybe} of the {@code value} where:
+   *   - undefined -> Nothing
+   *   - null -> Nothing
+   *   - a -> Just(a)
+   * @param value The value.
+   * @param <V> The underlying type.
+   * @return {@code Nothing} if the {@code value} is {@code null} or {@code undefined}; otherwise, {@code Just} of the
+   * {@code value}.
+   */
+  static <V> Maybe<V> of(final V value) {
+    return isNull(value) ? nothing() : just(value);
   }
 
   /**
