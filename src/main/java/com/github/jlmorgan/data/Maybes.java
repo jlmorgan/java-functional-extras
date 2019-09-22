@@ -32,4 +32,24 @@ public final class Maybes {
   public static <T> Maybe<T> filter(final Predicate<T> predicate, final Maybe<T> maybe) {
     return requireNonNull(maybe, "maybe must not be null").filter(predicate);
   }
+
+  /**
+   * Curried implementation of {@link Maybes#fmap(Function, Maybe)}.
+   */
+  @NotNull
+  @Contract(pure = true)
+  public static <T, U> Function<Maybe<T>, Maybe<U>> fmap(final Function<T, U> morphism) {
+    return maybe -> fmap(morphism, maybe);
+  }
+
+  /**
+   * Maps the underlying value of a {@link Maybe} in a {@code null}-safe way.
+   * @param morphism The morphism.
+   * @param <T> The underlying type of the {@link Maybe}.
+   * @param <U> The return type of the {@code morphism}.
+   * @return The mapped {@link Maybe}.
+   */
+  public static <T, U> Maybe<U> fmap(final Function<T, U> morphism, final Maybe<T> maybe) {
+    return requireNonNull(maybe, "maybe must not be null").fmap(morphism);
+  }
 }
