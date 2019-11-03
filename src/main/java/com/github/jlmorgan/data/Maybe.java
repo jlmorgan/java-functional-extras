@@ -225,6 +225,14 @@ public interface Maybe<A> {
   Maybe<A> filter(Predicate<A> predicate);
 
   /**
+   * Maps the underlying value of a {@link Maybe} in a {@code null}-safe way.
+   * @param morphism The morphism.
+   * @param <B> The return type of the {@code morphism}.
+   * @return The mapped {@link Maybe}.
+   */
+  <B> Maybe<B> fmap(Function<A, B> morphism);
+
+  /**
    * Determines whether or not the {@link Maybe} is a {@code Just}.
    * @return {@code true} for a {@code Just}; otherwise, {@code false}.
    */
@@ -236,6 +244,10 @@ public interface Maybe<A> {
    */
   default boolean isNothing() {
     return !isJust();
+  }
+
+  default <B> Maybe<B> map(Function<A, B> morphism) {
+    return fmap(morphism);
   }
 
   /**
@@ -281,6 +293,16 @@ public interface Maybe<A> {
       return requireNonNull(predicate, "predicate must not be null").test(_value)
         ? this
         : nothing();
+    }
+
+    /**
+     * Maps the underlying value of a {@link Maybe} in a {@code null}-safe way.
+     * @param morphism The morphism.
+     * @param <B> The return type of the {@code morphism}.
+     * @return The mapped {@link Maybe}.
+     */
+    public <B> Maybe<B> fmap(final Function<A, B> morphism) {
+      return of(requireNonNull(morphism, "morphism must not be null").apply(_value));
     }
 
     /**
@@ -339,6 +361,16 @@ public interface Maybe<A> {
      */
     public Maybe<A> filter(final Predicate<A> predicate) {
       return this;
+    }
+
+    /**
+     * Maps the underlying value of a {@link Maybe} in a {@code null}-safe way.
+     * @param morphism The morphism.
+     * @param <B> The return type of the {@code morphism}.
+     * @return The mapped {@link Maybe}.
+     */
+    public <B> Maybe<B> fmap(final Function<A, B> morphism) {
+      return nothing();
     }
 
     /**

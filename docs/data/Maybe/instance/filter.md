@@ -21,7 +21,7 @@ Tests the underlying value against the `predicate`, returning the `Just` of the 
 
 ## Throws
 
-* `NullPointerException` if the `predicate` is `null`.
+* `NullPointerException` if the `predicate` or `maybe` is `null`.
 
 ## Examples
 

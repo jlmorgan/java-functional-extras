@@ -34,6 +34,7 @@
     * [`.of`](./Maybe/static/of.md)
     * [`#equals`](./Maybe/instance/equals.md)
     * [`#filter`](./Maybe/instance/filter.md)
+    * [`#fmap`](./Maybe/instance/fmap.md)
     * [`#hashCode`](./Maybe/instance/hashCode.md)
     * [`#isJust`](./Maybe/instance/isJust.md)
     * [`#isNothing`](./Maybe/instance/isNothing.md)
