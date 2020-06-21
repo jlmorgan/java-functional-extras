@@ -1,6 +1,6 @@
 # `Maybe.<V>catMaybes(List<Maybe<V>> list)`
 
-Takes a list of `Maybe` and returns a list of the `Just` values.
+Takes a list of `Maybe` and a list of the `Just` values.
 
 ## Arguments
 

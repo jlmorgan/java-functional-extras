@@ -7,6 +7,8 @@ A finite ordered sequence of elements.
 * [Interface](./Tuple.md)
 * [Constructors](./constructors)
     * [`.of`](./constructors/of.md)
+* [Static Methods](./static)
+    * [`.tupleMap`](./static/tupleMap.md)
 * [Instance Methods](./instance)
     * [`#equals`](./instance/equals.md)
     * [`#first`](./instance/first.md)

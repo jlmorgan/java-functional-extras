@@ -23,6 +23,7 @@ class EitherTests {
         final Function<RuntimeException, String> testLeftMorphism = null;
         final Either<RuntimeException, UUID> testEither = Either.right(null);
 
+        // noinspection ConstantConditions
         assertThrows(
           NullPointerException.class,
           () -> Either.<RuntimeException, UUID, String>eitherMap(testLeftMorphism)
@@ -36,6 +37,7 @@ class EitherTests {
         final Function<UUID, String> testRightMorphism = null;
         final Either<RuntimeException, UUID> testEither = Either.right(null);
 
+        // noinspection ConstantConditions
         assertThrows(
           NullPointerException.class,
           () -> Either.<RuntimeException, UUID, String>eitherMap(_testLeftMorphism)
@@ -48,6 +50,7 @@ class EitherTests {
       void shouldThrowExceptionForNullEither() {
         final Either<RuntimeException, UUID> testEither = null;
 
+        // noinspection ConstantConditions
         assertThrows(
           NullPointerException.class,
           () -> Either.<RuntimeException, UUID, String>eitherMap(_testLeftMorphism)

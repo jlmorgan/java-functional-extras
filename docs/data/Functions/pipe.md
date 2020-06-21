@@ -15,7 +15,7 @@ Composes two functions `f` before `g`.
 
 ## Returns
 
-* `(Function<A, C>)`: Returns a function that maps a value of type `A` to type `C`.
+* `(Function<A, C>)`: A function that maps a value of type `A` to type `C`.
 
 ## Example
 

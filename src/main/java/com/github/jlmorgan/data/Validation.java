@@ -218,7 +218,7 @@ public interface Validation<A, B> {
   }
 
   /**
-   * Validates a value {@code b} and returns a {@code Success} of {@code b} if the {@code predicate} returns
+   * Validates a value {@code b} and a {@code Success} of {@code b} if the {@code predicate} returns
    * {@code true}; otherwise, a {@code Failure} of {@code a}.
    * @param predicate The predicate.
    * @param failureValue The failure value.

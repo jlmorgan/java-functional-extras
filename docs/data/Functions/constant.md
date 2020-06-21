@@ -13,7 +13,7 @@ The `K` combinator. Creates a unary function that ignores the input value and re
 
 ## Returns
 
-* `(Function<B, A>)`: Returns a unary function that takes a value of type `B` and returns the original value of type `A`.
+* `(Function<B, A>)`: A unary function that takes a value of type `B` and returns the original value of type `A`.
 
 ## Example
 
