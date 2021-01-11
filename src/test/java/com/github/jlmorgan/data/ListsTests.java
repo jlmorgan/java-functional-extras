@@ -16,11 +16,6 @@ import org.junit.jupiter.api.Test;
 class ListsTests {
   private static final Supplier<Integer> _randomInt = () -> new Random().nextInt(10);
 
-  // TODO(jlmorgan): Remove this code.
-  public void doTheThing() {
-    Lists.isEmpty(Collections.<Integer>emptyList());
-  }
-
   @Nested
   class DescribeAppend {
     @Test
@@ -88,15 +83,17 @@ class ListsTests {
 
     @Test
     void shouldThrowExceptionForNullFold() {
+      final BiFunction<Integer, Integer, Integer> testFold = null;
       final List<Integer> testList = Arrays.asList(
         _randomInt.get(),
         _randomInt.get(),
         _randomInt.get()
       );
 
+      // noinspection ConstantConditions
       assertThrows(
-        NullPointerException.class,
-        () -> foldLeft(_testFold, _testInitialValue, testList)
+        IllegalArgumentException.class,
+        () -> foldLeft(testFold, _testInitialValue, testList)
       );
     }
 
@@ -141,15 +138,17 @@ class ListsTests {
 
     @Test
     void shouldThrowExceptionForNullFold() {
+      final BiFunction<Integer, Integer, Integer> testFold = null;
       final List<Integer> testList = Arrays.asList(
         _randomInt.get(),
         _randomInt.get(),
         _randomInt.get()
       );
 
+      // noinspection ConstantConditions
       assertThrows(
-        NullPointerException.class,
-        () -> foldRight(_testFold, _testInitialValue, testList)
+        IllegalArgumentException.class,
+        () -> foldRight(testFold, _testInitialValue, testList)
       );
     }
 

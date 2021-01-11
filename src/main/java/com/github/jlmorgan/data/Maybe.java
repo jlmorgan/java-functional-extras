@@ -1,15 +1,20 @@
 package com.github.jlmorgan.data;
 
-import static java.util.Objects.isNull;
-import static java.util.Objects.requireNonNull;
+import static java.util.Objects.hash;
+import static com.github.jlmorgan.Objects.isNull;
+import static com.github.jlmorgan.Objects.requireNonNull;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+
+import com.github.jlmorgan.Objects;
 
 /**
  * The {@link Maybe} type is a disjunction that wraps an arbitrary value. The {@link Maybe} {@code a} either contains a
@@ -97,7 +102,7 @@ public interface Maybe<A> {
     return Optional.ofNullable(list)
       .orElseGet(Collections::emptyList)
       .stream()
-      .filter(Objects::nonNull)
+      .filter(Objects::isNotNull)
       .findFirst()
       .map(Maybe::just)
       .orElseGet(Maybe::nothing);
@@ -120,7 +125,7 @@ public interface Maybe<A> {
    * @param <V> The underlying type of the {@code list}.
    * @param <R> The underlying type of the result {@code list}.
    * @return A list of mapped {@code Just} values.
-   * @throws NullPointerException if the {@code morphism} is {@code null}.
+   * @throws IllegalArgumentException if the {@code morphism} is {@code null}.
    */
   static <V, R> List<R> mapMaybe(final Function<? super V, ? extends Maybe<R>> morphism, final List<V> list) {
     requireNonNull(morphism, "morphism must not be null");
@@ -162,7 +167,7 @@ public interface Maybe<A> {
    * @param <V> The underlying type of the {@code maybeMap}.
    * @param <R> The default value and return type.
    * @return The mapped underlying value for a {@code Just}; otherwise, the {@code defaultValue}.
-   * @throws NullPointerException if the {@code morphism} is {@code null}.
+   * @throws IllegalArgumentException if the {@code morphism} is {@code null}.
    */
   @Contract("!null, _, _ -> !null")
   static <V, R> R maybeMap(final R defaultValue, final Function<? super V, R> morphism, final Maybe<V> maybe) {
@@ -202,7 +207,7 @@ public interface Maybe<A> {
   }
 
   /**
-   * Creates a {@link Maybe} of the {@code value} where:
+   * Creates a {@link Maybe} of the {@code value} where.
    *   - undefined -> Nothing
    *   - null -> Nothing
    *   - a -> Just(a)
@@ -220,7 +225,7 @@ public interface Maybe<A> {
    * otherwise, {@code Nothing}.
    * @param predicate The predicate with which to test the value.
    * @return The {@code Just} of the value for {@code true}; otherwise, {@code Nothing}.
-   * @throws NullPointerException if the {@code predicate} is {@code null}.
+   * @throws IllegalArgumentException if the {@code predicate} is {@code null}.
    */
   Maybe<A> filter(Predicate<A> predicate);
 
@@ -287,7 +292,7 @@ public interface Maybe<A> {
      * {@code true}; otherwise, {@code Nothing}.
      * @param predicate The predicate with which to test the value.
      * @return The {@code Just} of the value for {@code true}; otherwise, {@code Nothing}.
-     * @throws NullPointerException if the {@code predicate} is {@code null}.
+     * @throws IllegalArgumentException if the {@code predicate} is {@code null}.
      */
     public Maybe<A> filter(final Predicate<A> predicate) {
       return requireNonNull(predicate, "predicate must not be null").test(_value)
@@ -311,7 +316,7 @@ public interface Maybe<A> {
      */
     @Override
     public int hashCode() {
-      return Objects.hash(_value);
+      return hash(_value);
     }
 
     /**

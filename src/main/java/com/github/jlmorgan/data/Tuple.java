@@ -1,12 +1,12 @@
 package com.github.jlmorgan.data;
 
+import static java.util.Objects.requireNonNull;
+
 import java.util.Objects;
 import java.util.function.Function;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  * A finite ordered sequence of elements.

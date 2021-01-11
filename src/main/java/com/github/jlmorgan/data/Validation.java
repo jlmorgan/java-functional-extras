@@ -1,7 +1,8 @@
 package com.github.jlmorgan.data;
 
 import static java.util.Collections.*;
-import static java.util.Objects.requireNonNull;
+import static java.util.Objects.hash;
+import static com.github.jlmorgan.Objects.*;
 
 import java.util.*;
 import java.util.function.Function;
@@ -11,6 +12,8 @@ import java.util.stream.Stream;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+
+import com.github.jlmorgan.Objects;
 
 /**
  * The {@link Validation} type is a right-biased disjunction that represents two possibilities: either a {@code Failure}
@@ -39,7 +42,7 @@ public interface Validation<A, B> {
    * @param <S> The underlying success type.
    * @return The first {@code Success} for two successes, the first {@code Failure} for mixed; otherwise, a
    * {@code Failure} of the concatenation of the failure values.
-   * @throws NullPointerException if the either {@link Validation} is {@code null}.
+   * @throws IllegalArgumentException if the either {@link Validation} is {@code null}.
    */
   static <F, S> Validation<F, S> concat(final Validation<F, S> second, final Validation<F, S> first) {
     requireNonNull(second, "second validation must not be null");
@@ -98,7 +101,7 @@ public interface Validation<A, B> {
     return Optional.ofNullable(collection)
       .map(Collection::stream)
       .orElseGet(Stream::empty)
-      .filter(Objects::nonNull)
+      .filter(Objects::isNotNull)
       .filter(Validation::isFailure)
       .map(fromFailure(null))
       .flatMap(Collection::stream)
@@ -193,7 +196,7 @@ public interface Validation<A, B> {
     return Optional.ofNullable(collection)
       .map(Collection::stream)
       .orElseGet(Stream::empty)
-      .filter(Objects::nonNull)
+      .filter(Objects::isNotNull)
       .filter(Validation::isSuccess)
       .map(fromSuccess(null))
       .collect(Collectors.toList());
@@ -267,7 +270,7 @@ public interface Validation<A, B> {
    * @param <S> The underlying success type.
    * @param <C> The return type.
    * @return The result of the catamorphism of the {@code validation}.
-   * @throws NullPointerException if the {@code failureMorphism}, {@code successMorphism}, or {@code validation} is
+   * @throws IllegalArgumentException if the {@code failureMorphism}, {@code successMorphism}, or {@code validation} is
    * {@code null}.
    */
   static <F, S, C> C validationMap(
@@ -340,7 +343,7 @@ public interface Validation<A, B> {
      */
     @Override
     public int hashCode() {
-      return Objects.hash(_values);
+      return hash(_values);
     }
 
     /**
@@ -407,7 +410,7 @@ public interface Validation<A, B> {
      */
     @Override
     public int hashCode() {
-      return Objects.hash(_value);
+      return hash(_value);
     }
 
     /**

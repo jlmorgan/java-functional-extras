@@ -25,7 +25,7 @@ class ValidationTests {
 
         // noinspection ConstantConditions
         assertThrows(
-          NullPointerException.class,
+          IllegalArgumentException.class,
           () -> Validation.concat(testSecond).apply(testFirst)
         );
       }
@@ -37,7 +37,7 @@ class ValidationTests {
 
         // noinspection ConstantConditions
         assertThrows(
-          NullPointerException.class,
+          IllegalArgumentException.class,
           () -> Validation.concat(testSecond).apply(testFirst)
         );
       }
@@ -360,7 +360,7 @@ class ValidationTests {
 
         // noinspection ConstantConditions
         assertThrows(
-          NullPointerException.class,
+          IllegalArgumentException.class,
           () -> Validation.<String, UUID>validate(testPredicate).apply(_testFailureValue).apply(_testValue)
         );
       }
@@ -405,7 +405,7 @@ class ValidationTests {
 
         // noinspection ConstantConditions
         assertThrows(
-          NullPointerException.class,
+          IllegalArgumentException.class,
           () -> Validation.<RuntimeException, UUID, String>validationMap(testFailureMorphism)
             .apply(_testSuccessMorphism)
             .apply(testValidation)
@@ -419,7 +419,7 @@ class ValidationTests {
 
         // noinspection ConstantConditions
         assertThrows(
-          NullPointerException.class,
+          IllegalArgumentException.class,
           () -> Validation.<RuntimeException, UUID, String>validationMap(_testFailureMorphism)
             .apply(testSuccessMorphism)
             .apply(testValidation)
@@ -432,7 +432,7 @@ class ValidationTests {
 
         // noinspection ConstantConditions
         assertThrows(
-          NullPointerException.class,
+          IllegalArgumentException.class,
           () -> Validation.<RuntimeException, UUID, String>validationMap(_testFailureMorphism)
             .apply(_testSuccessMorphism)
             .apply(testValidation)
