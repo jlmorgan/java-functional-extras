@@ -115,7 +115,7 @@ class MaybeTests {
     class DescribeJust {
       @Test
       void shouldThrowExceptionForNull() {
-        assertThrows(NullPointerException.class, () -> Maybe.just(null));
+        assertThrows(IllegalArgumentException.class, () -> Maybe.just(null));
       }
     }
 
@@ -213,7 +213,7 @@ class MaybeTests {
         final Maybe<UUID> testMaybe = Maybe.just(UUID.randomUUID());
 
         assertThrows(
-          NullPointerException.class,
+          IllegalArgumentException.class,
           () -> Maybe.<UUID, String>maybeMap(_testDefaultValue)
             .apply(testMorphism)
             .apply(testMaybe)
@@ -225,6 +225,7 @@ class MaybeTests {
         final Maybe<UUID> testMaybe = null;
         // noinspection UnnecessaryLocalVariable
         final String expectedResult = _testDefaultValue;
+        // noinspection ConstantConditions
         final String actualResult = Maybe.<UUID, String>maybeMap(_testDefaultValue)
           .apply(_testMorphism)
           .apply(testMaybe);

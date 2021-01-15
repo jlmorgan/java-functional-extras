@@ -25,7 +25,7 @@ class MaybesTests {
       final Maybe<Integer> testMaybe = Maybe.just(0);
 
       // noinspection ConstantConditions
-      assertThrows(NullPointerException.class, () -> Maybes.filter(testPredicate, testMaybe));
+      assertThrows(IllegalArgumentException.class, () -> Maybes.filter(testPredicate, testMaybe));
     }
 
     @Test
@@ -33,7 +33,7 @@ class MaybesTests {
       final Maybe<Integer> testMaybe = null;
 
       // noinspection ConstantConditions
-      assertThrows(NullPointerException.class, () -> Maybes.filter(_testPredicate, testMaybe));
+      assertThrows(IllegalArgumentException.class, () -> Maybes.filter(_testPredicate, testMaybe));
     }
 
     @Test
@@ -76,7 +76,7 @@ class MaybesTests {
       final Maybe<List<String>> testMaybe = Maybe.just(Collections.singletonList(UUID.randomUUID().toString()));
 
       // noinspection ConstantConditions
-      assertThrows(NullPointerException.class, () -> Maybes.fmap(testMorphism, testMaybe));
+      assertThrows(IllegalArgumentException.class, () -> Maybes.fmap(testMorphism, testMaybe));
     }
 
     @Test
@@ -84,7 +84,7 @@ class MaybesTests {
       final Maybe<List<String>> testMaybe = null;
 
       // noinspection ConstantConditions
-      assertThrows(NullPointerException.class, () -> Maybes.fmap(_testMorphism, testMaybe));
+      assertThrows(IllegalArgumentException.class, () -> Maybes.fmap(_testMorphism, testMaybe));
     }
 
     @Test

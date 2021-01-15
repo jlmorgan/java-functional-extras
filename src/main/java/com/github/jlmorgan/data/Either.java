@@ -1,6 +1,6 @@
 package com.github.jlmorgan.data;
 
-import static java.util.Objects.requireNonNull;
+import static com.github.jlmorgan.Objects.requireNonNull;
 
 import java.util.Collection;
 import java.util.List;
@@ -55,7 +55,8 @@ public interface Either<A, B> {
    * @param <C> The return type.
    * @return The result of the catamorphism of the {@code either}.
    * @see <a href="https://en.wikipedia.org/wiki/Catamorphism">Catamorphism</a>
-   * @throws NullPointerException if the {@code leftMorphism}, {@code rightMorphism}, or {@code either} is {@code null}.
+   * @throws IllegalArgumentException if the {@code leftMorphism}, {@code rightMorphism}, or {@code either} is
+   * {@code null}.
    */
   static <L, R, C> C eitherMap(
     final Function<? super L, ? extends C> leftMorphism,

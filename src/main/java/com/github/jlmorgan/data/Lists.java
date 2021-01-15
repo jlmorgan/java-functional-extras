@@ -2,10 +2,7 @@ package com.github.jlmorgan.data;
 
 import static com.github.jlmorgan.data.Tuple.tupleMap;
 import static java.util.Collections.emptyList;
-import static java.util.Objects.*;
-
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
+import static com.github.jlmorgan.Objects.*;
 
 import java.util.List;
 import java.util.ListIterator;
@@ -14,6 +11,9 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 public final class Lists {
   /**
@@ -78,13 +78,13 @@ public final class Lists {
    * @param <A> The underlying type.
    * @param <B> The resulting type.
    * @return The result of the fold.
-   * @throws NullPointerException if the {@code fold} is {@code null}.
+   * @throws IllegalArgumentException if the {@code fold} is {@code null}.
    */
   public static <A, B> B foldLeft(final BiFunction<B, A, B> fold, final B initialValue, final List<A> list) {
     requireNonNull(fold, "fold must not be null");
     B result = initialValue;
 
-    if (nonNull(list)) {
+    if (isNotNull(list)) {
       final ListIterator<A> iterator = list.listIterator(list.size());
 
       while (iterator.hasPrevious()) {
@@ -122,13 +122,13 @@ public final class Lists {
    * @param <A> The underlying type.
    * @param <B> The resulting type.
    * @return The result of the fold.
-   * @throws NullPointerException if the {@code fold} is {@code null}.
+   * @throws IllegalArgumentException if the {@code fold} is {@code null}.
    */
   public static <A, B> B foldRight(final BiFunction<A, B, B> fold, final B initialValue, final List<A> list) {
     requireNonNull(fold, "fold must not be null");
     B result = initialValue;
 
-    if (nonNull(list)) {
+    if (isNotNull(list)) {
       for (final A value : list) {
         result = fold.apply(value, result);
       }
@@ -235,7 +235,7 @@ public final class Lists {
    * @param <A> The underlying type.
    * @param <B> The mapped type.
    * @return The mapped list.
-   * @throws NullPointerException if the {@code morphism} is {@code null}.
+   * @throws IllegalArgumentException if the {@code morphism} is {@code null}.
    */
   public static <A, B> List<B> map(final Function<A, B> morphism, final List<A> list) {
     requireNonNull(morphism, "morphism must not be null");

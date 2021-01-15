@@ -1,6 +1,6 @@
 package com.github.jlmorgan.data;
 
-import static java.util.Objects.requireNonNull;
+import static com.github.jlmorgan.Objects.requireNonNull;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -27,7 +27,7 @@ public final class Maybes {
    * @param predicate The predicate with which to test the value.
    * @param maybe The maybe.
    * @return The {@code Just} of the value for {@code true}; otherwise, {@code Nothing}.
-   * @throws NullPointerException if the {@code maybe} is {@code null}.
+   * @throws IllegalArgumentException if the {@code maybe} is {@code null}.
    */
   public static <T> Maybe<T> filter(final Predicate<T> predicate, final Maybe<T> maybe) {
     return requireNonNull(maybe, "maybe must not be null").filter(predicate);
@@ -48,6 +48,7 @@ public final class Maybes {
    * @param <T> The underlying type of the {@link Maybe}.
    * @param <U> The return type of the {@code morphism}.
    * @return The mapped {@link Maybe}.
+   * @throws IllegalArgumentException if the {@code maybe} is {@code null}.
    */
   public static <T, U> Maybe<U> fmap(final Function<T, U> morphism, final Maybe<T> maybe) {
     return requireNonNull(maybe, "maybe must not be null").fmap(morphism);

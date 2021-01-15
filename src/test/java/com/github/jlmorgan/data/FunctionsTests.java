@@ -18,6 +18,34 @@ class FunctionsTests {
   private static final Function<Integer, String> _testBToC = value -> value == 1 ? "one" : "zero";
 
   @Nested
+  class DescribeCurriedAp {
+    @Test
+    void shouldApplyTheValueToTheSequence() {
+      double testValue = 10;
+      Function<Double, Double> testAToB = value -> Math.pow(value, 2);
+      BiFunction<Double, Double, Double> testAAndBToC = (a, b) -> a - b;
+      double expectedResult = testValue - Math.pow(testValue, 2);
+      double actualResult = ap(testAAndBToC).apply(testAToB).apply(testValue);
+
+      assertEquals(expectedResult, actualResult);
+    }
+  }
+
+  @Nested
+  class DescribeAp {
+    @Test
+    void shouldApplyTheValueToTheSequence() {
+      double testValue = 10;
+      Function<Double, Double> testAToB = value -> Math.pow(value, 2);
+      BiFunction<Double, Double, Double> testAAndBToC = (a, b) -> a - b;
+      double expectedResult = testValue - Math.pow(testValue, 2);
+      double actualResult = ap(testAAndBToC, testAToB).apply(testValue);
+
+      assertEquals(expectedResult, actualResult);
+    }
+  }
+
+  @Nested
   class DescribeCurriedCompose {
     @Test
     void shouldConvertTypeAToTypeC() {
@@ -90,6 +118,39 @@ class FunctionsTests {
       // noinspection UnnecessaryLocalVariable
       final UUID expectedResult = testValue;
       final UUID actualResult = id(testValue);
+
+      assertEquals(expectedResult, actualResult);
+    }
+  }
+
+  @Nested
+  class DescribeLiftCurriedA2 {
+    @Test
+    public void shouldApplyTheValueToTheSequence() {
+      double testValue = 10;
+      Function<Double, Double> testAToB = value -> Math.pow(value, 2);
+      Function<Double, Double> testAToC = value -> value / 2;
+      BiFunction<Double, Double, Double> testBAndCToD = (a, b) -> a - b;
+      double expectedResult = Math.pow(testValue, 2) - (testValue / 2);
+      double actualResult = Functions.<Double, Double, Double, Double>liftA2(testBAndCToD)
+        .apply(testAToC)
+        .apply(testAToB)
+        .apply(testValue);
+
+      assertEquals(expectedResult, actualResult);
+    }
+  }
+
+  @Nested
+  class DescribeLiftA2 {
+    @Test
+    public void shouldApplyTheValueToTheSequence() {
+      double testValue = 10;
+      Function<Double, Double> testAToB = value -> Math.pow(value, 2);
+      Function<Double, Double> testAToC = value -> value / 2;
+      BiFunction<Double, Double, Double> testBAndCToD = (a, b) -> a - b;
+      double expectedResult = Math.pow(testValue, 2) - (testValue / 2);
+      double actualResult = liftA2(testBAndCToD, testAToC, testAToB).apply(testValue);
 
       assertEquals(expectedResult, actualResult);
     }

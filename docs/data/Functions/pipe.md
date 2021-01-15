@@ -1,6 +1,10 @@
-# `pipe(f, g) | pipe(f).apply(g)`
+# `pipe(f, g)`
 
 Composes two functions `f` before `g`.
+
+## Alternatives
+
+* `pipe(f).apply(g)`
 
 ## Arguments
 
