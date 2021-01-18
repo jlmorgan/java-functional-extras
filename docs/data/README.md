@@ -17,6 +17,7 @@
     * [`#toString`](./Either/instance/toString.md)
 * [`Functions`](./Functions)
     * [`.ap`](./Functions/ap.md)
+    * [`.bind`](./Functions/bind.md)
     * [`.compose`](./Functions/compose.md)
     * [`.const`](./Functions/const.md)
     * [`.flip`](./Functions/flip.md)

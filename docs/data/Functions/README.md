@@ -3,6 +3,7 @@
 ## Table of Contents
 
 * [`.ap`](./ap.md)
+* [`.bind`](./bind.md)
 * [`.compose`](./compose.md)
 * [`.constant`](./constant.md)
 * [`.flip`](./flip.md)

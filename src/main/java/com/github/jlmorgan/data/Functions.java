@@ -37,6 +37,34 @@ public final class Functions {
   }
 
   /**
+   * Curried implementation of {@link Functions#bind(BiFunction, Function)}.
+   * @param g The second function.
+   * @param <A> Input type for the first function ({@code f}) and the second argument of the second function
+   * ({@code g}).
+   * @param <B> Output type of the first function ({@code f}) and the first argument of the second function ({@code g}).
+   * @param <C> Output type of the second function ({@code g}).
+   * @return A function that takes the first function ({@code f}) and returns the sequence composition.
+   */
+  public static <A, B, C> Function<Function<A, B>, Function<A, C>> bind(final BiFunction<B, A, C> g) {
+    return f -> bind(g, f);
+  }
+
+  /**
+   * Composes a sequence of two functions {@code g} after {@code f} where {@code f} maps the input value to the first
+   * argument of {@code g}.
+   * @param g The second function.
+   * @param f The first function.
+   * @param <A> Input type for the first function ({@code f}) and the second argument of the second function
+   * ({@code g}).
+   * @param <B> Output type of the first function ({@code f}) and the first argument of the second function ({@code g}).
+   * @param <C> Output type of the second function ({@code g}).
+   * @return A function that takes the value and applies it to the sequence.
+   */
+  public static <A, B, C> Function<A, C> bind(final BiFunction<B, A, C> g, final Function<A, B> f) {
+    return value -> g.apply(f.apply(value), value);
+  }
+
+  /**
    * Provides a curried version of {@link Functions#compose(Function, Function)}.
    * @param g The second function.
    * @param <A> Input type to the first function ({@code f}) in the composition.
