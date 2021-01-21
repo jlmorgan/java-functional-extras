@@ -46,6 +46,34 @@ class FunctionsTests {
   }
 
   @Nested
+  class DescribeCurriedBind {
+    @Test
+    void shouldApplyTheValueToTheSequence() {
+      double testValue = 10;
+      Function<Double, Double> testAToB = value -> Math.pow(value, 2);
+      BiFunction<Double, Double, Double> testAAndBToC = (a, b) -> a - b;
+      double expectedResult = Math.pow(testValue, 2) - testValue;
+      double actualResult = bind(testAAndBToC).apply(testAToB).apply(testValue);
+
+      assertEquals(expectedResult, actualResult);
+    }
+  }
+
+  @Nested
+  class DescribeBind {
+    @Test
+    void shouldApplyTheValueToTheSequence() {
+      double testValue = 10;
+      Function<Double, Double> testAToB = value -> Math.pow(value, 2);
+      BiFunction<Double, Double, Double> testAAndBToC = (a, b) -> a - b;
+      double expectedResult = Math.pow(testValue, 2) - testValue;
+      double actualResult = bind(testAAndBToC, testAToB).apply(testValue);
+
+      assertEquals(expectedResult, actualResult);
+    }
+  }
+
+  @Nested
   class DescribeCurriedCompose {
     @Test
     void shouldConvertTypeAToTypeC() {
