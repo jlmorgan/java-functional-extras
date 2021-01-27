@@ -1,6 +1,6 @@
 # `Validation.<F, S>concat(Validation<F, S> second, Validation<F, S> first)`
 
-Concatenates two `Failure` values together, replacing a `Success` with the `Failure`; otherwise, take the first `Success`.
+Concatenates two `Invalid` values together, replacing a `Valid` with the `Invalid`; otherwise, take the first `Valid`.
 
 ## Alternatives
 
@@ -13,12 +13,12 @@ Concatenates two `Failure` values together, replacing a `Success` with the `Fail
 
 ## Types
 
-* `F`: The underlying failure type.
-* `S`: The underlying success type.
+* `F`: The underlying invalid type.
+* `S`: The underlying valid type.
 
 ## Returns
 
-* `(Validation<F, S>)`: The first `Success` for two successes, the first `Failure` for mixed; otherwise, a `Failure` of the concatenation of the failure values.
+* `(Validation<F, S>)`: The first `Valid` for two valids, the first `Invalid` for mixed; otherwise, a `Invalid` of the concatenation of the invalid values.
 
 ## Throws
 
@@ -28,26 +28,26 @@ Concatenates two `Failure` values together, replacing a `Success` with the `Fail
 
 ```java
 Validation.concat(
-  Validation.<String, Integer>success(0),
-  Validation.<String, Integer>success(1)
+  Validation.<String, Integer>valid(0),
+  Validation.<String, Integer>valid(1)
 );
-// => Success(0)
+// => Valid(0)
 
 Validation.concat(
-  Validation.<String, Integer>success(0),
-  Validation.<String, Integer>failure("a")
+  Validation.<String, Integer>valid(0),
+  Validation.<String, Integer>invalid("a")
 );
-// => Failure(["a"])
+// => Invalid(["a"])
 
 Validation.concat(
-  Validation.<String, Integer>failure("a"),
-  Validation.<String, Integer>success(0)
+  Validation.<String, Integer>invalid("a"),
+  Validation.<String, Integer>valid(0)
 );
-// => Failure(["a"])
+// => Invalid(["a"])
 
 Validation.concat(
-  Validation.<String, Integer>failure("b"),
-  Validation.<String, Integer>failure("a")
+  Validation.<String, Integer>invalid("b"),
+  Validation.<String, Integer>invalid("a")
 );
-// => Failure(["a", "b"])
+// => Invalid(["a", "b"])
 ```

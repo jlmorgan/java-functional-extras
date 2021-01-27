@@ -3,10 +3,10 @@
 ## Table of Contents
 
 * [`.concat`](./concat.md)
-* [`.failures`](./failures.md)
-* [`.fromFailure`](./fromFailure.md)
-* [`.fromSuccess`](./fromSuccess.md)
+* [`.fromInvalid`](./fromInvalid.md)
+* [`.fromValid`](./fromValid.md)
+* [`.invalids`](./invalids.md)
 * [`.partitionValidations`](./partitionValidations.md)
-* [`.successes`](./successes.md)
 * [`.validate`](./validate.md)
 * [`.validationMap`](./validationMap.md)
+* [`.valids`](./valids.md)

@@ -3,6 +3,6 @@
 ## Table of Contents
 
 * [`#equals`](./equals.md)
-* [`#isFailure`](./isFailure.md)
-* [`#isSuccess`](./isSuccess.md)
+* [`#isInvalid`](./isInvalid.md)
+* [`#isValid`](./isValid.md)
 * [`#toString`](./toString.md)

@@ -21,7 +21,7 @@ class ValidationTests {
       @Test
       void shouldThrowExceptionForNullSecond() {
         final Validation<String, UUID> testSecond = null;
-        final Validation<String, UUID> testFirst = Validation.success(UUID.randomUUID());
+        final Validation<String, UUID> testFirst = Validation.valid(UUID.randomUUID());
 
         // noinspection ConstantConditions
         assertThrows(
@@ -32,7 +32,7 @@ class ValidationTests {
 
       @Test
       void shouldThrowExceptionForNullFirst() {
-        final Validation<String, UUID> testSecond = Validation.success(UUID.randomUUID());
+        final Validation<String, UUID> testSecond = Validation.valid(UUID.randomUUID());
         final Validation<String, UUID> testFirst = null;
 
         // noinspection ConstantConditions
@@ -43,9 +43,9 @@ class ValidationTests {
       }
 
       @Test
-      void shouldReturnFirstForBothSuccesses() {
-        final Validation<String, UUID> testSecond = Validation.success(UUID.randomUUID());
-        final Validation<String, UUID> testFirst = Validation.success(UUID.randomUUID());
+      void shouldReturnFirstForBothValids() {
+        final Validation<String, UUID> testSecond = Validation.valid(UUID.randomUUID());
+        final Validation<String, UUID> testFirst = Validation.valid(UUID.randomUUID());
         // noinspection UnnecessaryLocalVariable
         final Validation<String, UUID> expectedResult = testFirst;
         final Validation<String, UUID> actualResult = Validation.concat(testSecond).apply(testFirst);
@@ -54,9 +54,9 @@ class ValidationTests {
       }
 
       @Test
-      void shouldReturnFirstForFirstFailure() {
-        final Validation<String, UUID> testSecond = Validation.success(UUID.randomUUID());
-        final Validation<String, UUID> testFirst = Validation.failure(UUID.randomUUID().toString());
+      void shouldReturnFirstForFirstInvalid() {
+        final Validation<String, UUID> testSecond = Validation.valid(UUID.randomUUID());
+        final Validation<String, UUID> testFirst = Validation.invalid(UUID.randomUUID().toString());
         // noinspection UnnecessaryLocalVariable
         final Validation<String, UUID> expectedResult = testFirst;
         final Validation<String, UUID> actualResult = Validation.concat(testSecond).apply(testFirst);
@@ -65,9 +65,9 @@ class ValidationTests {
       }
 
       @Test
-      void shouldReturnSecondForSecondFailure() {
-        final Validation<String, UUID> testSecond = Validation.failure(UUID.randomUUID().toString());
-        final Validation<String, UUID> testFirst = Validation.success(UUID.randomUUID());
+      void shouldReturnSecondForSecondInvalid() {
+        final Validation<String, UUID> testSecond = Validation.invalid(UUID.randomUUID().toString());
+        final Validation<String, UUID> testFirst = Validation.valid(UUID.randomUUID());
         // noinspection UnnecessaryLocalVariable
         final Validation<String, UUID> expectedResult = testSecond;
         final Validation<String, UUID> actualResult = Validation.concat(testSecond).apply(testFirst);
@@ -76,12 +76,12 @@ class ValidationTests {
       }
 
       @Test
-      void shouldReturnedConcatenatedFailures() {
+      void shouldReturnedConcatenatedInvalids() {
         final String testValue1 = UUID.randomUUID().toString();
         final String testValue2 = UUID.randomUUID().toString();
-        final Validation<String, UUID> testSecond = Validation.failure(testValue2);
-        final Validation<String, UUID> testFirst = Validation.failure(testValue1);
-        final Validation<String, UUID> expectedResult = Validation.failure(Arrays.asList(testValue1, testValue2));
+        final Validation<String, UUID> testSecond = Validation.invalid(testValue2);
+        final Validation<String, UUID> testFirst = Validation.invalid(testValue1);
+        final Validation<String, UUID> expectedResult = Validation.invalid(Arrays.asList(testValue1, testValue2));
         final Validation<String, UUID> actualResult = Validation.concat(testSecond).apply(testFirst);
 
         assertEquals(expectedResult, actualResult);
@@ -89,13 +89,13 @@ class ValidationTests {
     }
 
     @Nested
-    class DescribeFailures {
+    class DescribeInvalids {
       @Test
       void shouldReturnEmptyCollectionForNullCollection() {
         final Collection<Validation<String, UUID>> testCollection = null;
         final Collection<String> expectedResult = emptyList();
         // noinspection ConstantConditions
-        final Collection<String> actualResult = Validation.failures(testCollection);
+        final Collection<String> actualResult = Validation.invalids(testCollection);
 
         assertEquals(expectedResult, actualResult);
       }
@@ -104,7 +104,7 @@ class ValidationTests {
       void shouldReturnEmptyCollectionForEmptyCollection() {
         final Collection<Validation<String, UUID>> testCollection = emptyList();
         final Collection<String> expectedResult = emptyList();
-        final Collection<String> actualResult = Validation.failures(testCollection);
+        final Collection<String> actualResult = Validation.invalids(testCollection);
 
         assertEquals(expectedResult, actualResult);
       }
@@ -113,35 +113,35 @@ class ValidationTests {
       void shouldReturnEmptyCollectionForBlankCollection() {
         final Collection<Validation<String, UUID>> testCollection = singletonList(null);
         final Collection<String> expectedResult = emptyList();
-        final Collection<String> actualResult = Validation.failures(testCollection);
+        final Collection<String> actualResult = Validation.invalids(testCollection);
 
         assertEquals(expectedResult, actualResult);
       }
 
       @Test
-      void shouldReturnCollectionOfFailureValuesForMixedCollection() {
-        final String testFailureValue1 = UUID.randomUUID().toString();
-        final String testFailureValue2 = UUID.randomUUID().toString();
-        final UUID testSuccessValue1 = UUID.randomUUID();
-        final UUID testSuccessValue2 = UUID.randomUUID();
+      void shouldReturnCollectionOfInvalidValuesForMixedCollection() {
+        final String testInvalidValue1 = UUID.randomUUID().toString();
+        final String testInvalidValue2 = UUID.randomUUID().toString();
+        final UUID testValidValue1 = UUID.randomUUID();
+        final UUID testValidValue2 = UUID.randomUUID();
         final Collection<Validation<String, UUID>> testCollection = Arrays.asList(
-          Validation.failure(testFailureValue1),
-          Validation.failure(testFailureValue2),
-          Validation.success(testSuccessValue1),
-          Validation.success(testSuccessValue2)
+          Validation.invalid(testInvalidValue1),
+          Validation.invalid(testInvalidValue2),
+          Validation.valid(testValidValue1),
+          Validation.valid(testValidValue2)
         );
         final Collection<String> expectedResult = Arrays.asList(
-          testFailureValue1,
-          testFailureValue2
+          testInvalidValue1,
+          testInvalidValue2
         );
-        final Collection<String> actualResult = Validation.failures(testCollection);
+        final Collection<String> actualResult = Validation.invalids(testCollection);
 
         assertEquals(expectedResult, actualResult);
       }
     }
 
     @Nested
-    class DescribeFromFailure {
+    class DescribeFromInvalid {
       private final Collection<String> _testDefaultValues = Arrays.asList(
         UUID.randomUUID().toString(),
         UUID.randomUUID().toString()
@@ -153,29 +153,29 @@ class ValidationTests {
         // noinspection UnnecessaryLocalVariable
         final Collection<String> expectedResult = _testDefaultValues;
         // noinspection ConstantConditions
-        final Collection<String> actualResult = Validation.<String, UUID>fromFailure(_testDefaultValues)
+        final Collection<String> actualResult = Validation.<String, UUID>fromInvalid(_testDefaultValues)
           .apply(testValidation);
 
         assertEquals(expectedResult, actualResult);
       }
 
       @Test
-      void shouldReturnDefaultValueForSuccess() {
-        final Validation<String, UUID> testValidation = Validation.success(UUID.randomUUID());
+      void shouldReturnDefaultValueForValid() {
+        final Validation<String, UUID> testValidation = Validation.valid(UUID.randomUUID());
         // noinspection UnnecessaryLocalVariable
         final Collection<String> expectedResult = _testDefaultValues;
-        final Collection<String> actualResult = Validation.<String, UUID>fromFailure(_testDefaultValues)
+        final Collection<String> actualResult = Validation.<String, UUID>fromInvalid(_testDefaultValues)
           .apply(testValidation);
 
         assertEquals(expectedResult, actualResult);
       }
 
       @Test
-      void shouldReturnFailureValueFromFailure() {
-        final String testFailureValue = UUID.randomUUID().toString();
-        final Validation<String, UUID> testValidation = Validation.failure(testFailureValue);
-        final Collection<String> expectedResult = singletonList(testFailureValue);
-        final Collection<String> actualResult = Validation.<String, UUID>fromFailure(_testDefaultValues)
+      void shouldReturnInvalidValueFromInvalid() {
+        final String testInvalidValue = UUID.randomUUID().toString();
+        final Validation<String, UUID> testValidation = Validation.invalid(testInvalidValue);
+        final Collection<String> expectedResult = singletonList(testInvalidValue);
+        final Collection<String> actualResult = Validation.<String, UUID>fromInvalid(_testDefaultValues)
           .apply(testValidation);
 
         assertEquals(expectedResult, actualResult);
@@ -183,7 +183,7 @@ class ValidationTests {
     }
 
     @Nested
-    class DescribeFromSuccess {
+    class DescribeFromValid {
       private final UUID _testDefaultValue = UUID.randomUUID();
 
       @Test
@@ -192,30 +192,30 @@ class ValidationTests {
         // noinspection UnnecessaryLocalVariable
         final UUID expectedResult = _testDefaultValue;
         // noinspection ConstantConditions
-        final UUID actualResult = Validation.<String, UUID>fromSuccess(_testDefaultValue)
+        final UUID actualResult = Validation.<String, UUID>fromValid(_testDefaultValue)
           .apply(testValidation);
 
         assertEquals(expectedResult, actualResult);
       }
 
       @Test
-      void shouldReturnDefaultValueForSuccess() {
-        final Validation<String, UUID> testValidation = Validation.failure(UUID.randomUUID().toString());
+      void shouldReturnDefaultValueForValid() {
+        final Validation<String, UUID> testValidation = Validation.invalid(UUID.randomUUID().toString());
         // noinspection UnnecessaryLocalVariable
         final UUID expectedResult = _testDefaultValue;
-        final UUID actualResult = Validation.<String, UUID>fromSuccess(_testDefaultValue)
+        final UUID actualResult = Validation.<String, UUID>fromValid(_testDefaultValue)
           .apply(testValidation);
 
         assertEquals(expectedResult, actualResult);
       }
 
       @Test
-      void shouldReturnSuccessValueForSuccess() {
-        final UUID testSuccessValue = UUID.randomUUID();
-        final Validation<String, UUID> testValidation = Validation.success(testSuccessValue);
+      void shouldReturnValidValueForValid() {
+        final UUID testValidValue = UUID.randomUUID();
+        final Validation<String, UUID> testValidation = Validation.valid(testValidValue);
         // noinspection UnnecessaryLocalVariable
-        final UUID expectedResult = testSuccessValue;
-        final UUID actualResult = Validation.<String, UUID>fromSuccess(_testDefaultValue)
+        final UUID expectedResult = testValidValue;
+        final UUID actualResult = Validation.<String, UUID>fromValid(_testDefaultValue)
           .apply(testValidation);
 
         assertEquals(expectedResult, actualResult);
@@ -269,24 +269,24 @@ class ValidationTests {
 
       @Test
       void shouldReturnCollectionsForMixedCollection() {
-        final String testFailureValue1 = UUID.randomUUID().toString();
-        final String testFailureValue2 = UUID.randomUUID().toString();
-        final UUID testSuccessValue1 = UUID.randomUUID();
-        final UUID testSuccessValue2 = UUID.randomUUID();
+        final String testInvalidValue1 = UUID.randomUUID().toString();
+        final String testInvalidValue2 = UUID.randomUUID().toString();
+        final UUID testValidValue1 = UUID.randomUUID();
+        final UUID testValidValue2 = UUID.randomUUID();
         final Collection<Validation<String, UUID>> testCollection = Arrays.asList(
-          Validation.failure(testFailureValue1),
-          Validation.failure(testFailureValue2),
-          Validation.success(testSuccessValue1),
-          Validation.success(testSuccessValue2)
+          Validation.invalid(testInvalidValue1),
+          Validation.invalid(testInvalidValue2),
+          Validation.valid(testValidValue1),
+          Validation.valid(testValidValue2)
         );
         final Tuple<Collection<String>, Collection<UUID>> expectedResult = Tuple.of(
           Arrays.asList(
-            testFailureValue1,
-            testFailureValue2
+            testInvalidValue1,
+            testInvalidValue2
           ),
           Arrays.asList(
-            testSuccessValue1,
-            testSuccessValue2
+            testValidValue1,
+            testValidValue2
           )
         );
         final Tuple<Collection<String>, Collection<UUID>> actualResult = Validation.partitionValidations(
@@ -298,13 +298,13 @@ class ValidationTests {
     }
 
     @Nested
-    class DescribeSuccesses {
+    class DescribeValids {
       @Test
       void shouldReturnEmptyCollectionForNullCollection() {
         final Collection<Validation<String, UUID>> testCollection = null;
         final Collection<UUID> expectedResult = emptyList();
         // noinspection ConstantConditions
-        final Collection<UUID> actualResult = Validation.successes(testCollection);
+        final Collection<UUID> actualResult = Validation.valids(testCollection);
 
         assertEquals(expectedResult, actualResult);
       }
@@ -313,7 +313,7 @@ class ValidationTests {
       void shouldReturnEmptyCollectionForEmptyCollection() {
         final Collection<Validation<String, UUID>> testCollection = emptyList();
         final Collection<UUID> expectedResult = emptyList();
-        final Collection<UUID> actualResult = Validation.successes(testCollection);
+        final Collection<UUID> actualResult = Validation.valids(testCollection);
 
         assertEquals(expectedResult, actualResult);
       }
@@ -322,28 +322,28 @@ class ValidationTests {
       void shouldReturnEmptyCollectionForBlankCollection() {
         final Collection<Validation<String, UUID>> testCollection = singletonList(null);
         final Collection<UUID> expectedResult = emptyList();
-        final Collection<UUID> actualResult = Validation.successes(testCollection);
+        final Collection<UUID> actualResult = Validation.valids(testCollection);
 
         assertEquals(expectedResult, actualResult);
       }
 
       @Test
-      void shouldReturnCollectionOfFailureValuesForMixedCollection() {
-        final String testFailureValue1 = UUID.randomUUID().toString();
-        final String testFailureValue2 = UUID.randomUUID().toString();
-        final UUID testSuccessValue1 = UUID.randomUUID();
-        final UUID testSuccessValue2 = UUID.randomUUID();
+      void shouldReturnCollectionOfInvalidValuesForMixedCollection() {
+        final String testInvalidValue1 = UUID.randomUUID().toString();
+        final String testInvalidValue2 = UUID.randomUUID().toString();
+        final UUID testValidValue1 = UUID.randomUUID();
+        final UUID testValidValue2 = UUID.randomUUID();
         final Collection<Validation<String, UUID>> testCollection = Arrays.asList(
-          Validation.failure(testFailureValue1),
-          Validation.failure(testFailureValue2),
-          Validation.success(testSuccessValue1),
-          Validation.success(testSuccessValue2)
+          Validation.invalid(testInvalidValue1),
+          Validation.invalid(testInvalidValue2),
+          Validation.valid(testValidValue1),
+          Validation.valid(testValidValue2)
         );
         final Collection<UUID> expectedResult = Arrays.asList(
-          testSuccessValue1,
-          testSuccessValue2
+          testValidValue1,
+          testValidValue2
         );
-        final Collection<UUID> actualResult = Validation.successes(testCollection);
+        final Collection<UUID> actualResult = Validation.valids(testCollection);
 
         assertEquals(expectedResult, actualResult);
       }
@@ -351,7 +351,7 @@ class ValidationTests {
 
     @Nested
     class DescribeValidate {
-      private final String _testFailureValue = UUID.randomUUID().toString();
+      private final String _testInvalidValue = UUID.randomUUID().toString();
       private final UUID _testValue = UUID.randomUUID();
 
       @Test
@@ -361,27 +361,27 @@ class ValidationTests {
         // noinspection ConstantConditions
         assertThrows(
           IllegalArgumentException.class,
-          () -> Validation.<String, UUID>validate(testPredicate).apply(_testFailureValue).apply(_testValue)
+          () -> Validation.<String, UUID>validate(testPredicate).apply(_testInvalidValue).apply(_testValue)
         );
       }
 
       @Test
-      void shouldReturnFailureForFalsePredicate() {
+      void shouldReturnInvalidForFalsePredicate() {
         final Predicate<UUID> testPredicate = ignored -> false;
-        final Validation<String, UUID> expectedResult = Validation.failure(_testFailureValue);
+        final Validation<String, UUID> expectedResult = Validation.invalid(_testInvalidValue);
         final Validation<String, UUID> actualResult = Validation.<String, UUID>validate(testPredicate)
-          .apply(_testFailureValue)
+          .apply(_testInvalidValue)
           .apply(_testValue);
 
         assertEquals(expectedResult, actualResult);
       }
 
       @Test
-      void shouldReturnSuccessForTruePredicate() {
+      void shouldReturnValidForTruePredicate() {
         final Predicate<UUID> testPredicate = ignored -> true;
-        final Validation<String, UUID> expectedResult = Validation.success(_testValue);
+        final Validation<String, UUID> expectedResult = Validation.valid(_testValue);
         final Validation<String, UUID> actualResult = Validation.<String, UUID>validate(testPredicate)
-          .apply(_testFailureValue)
+          .apply(_testInvalidValue)
           .apply(_testValue);
 
         assertEquals(expectedResult, actualResult);
@@ -390,38 +390,38 @@ class ValidationTests {
 
     @Nested
     class DescribeValidationMap {
-      private final Function<Collection<RuntimeException>, String> _testFailureMorphism = collection -> collection
+      private final Function<Collection<RuntimeException>, String> _testInvalidMorphism = collection -> collection
         .stream()
         .map(RuntimeException::getMessage)
         .collect(Collectors.joining(". "));
-      private final Function<UUID, String> _testSuccessMorphism = UUID::toString;
+      private final Function<UUID, String> _testValidMorphism = UUID::toString;
 
       @Test
-      void shouldThrowExceptionForNullFailureMorphism() {
-        final Function<Collection<RuntimeException>, String> testFailureMorphism = null;
-        final Validation<RuntimeException, UUID> testValidation = Validation.failure(
+      void shouldThrowExceptionForNullInvalidMorphism() {
+        final Function<Collection<RuntimeException>, String> testInvalidMorphism = null;
+        final Validation<RuntimeException, UUID> testValidation = Validation.invalid(
           new RuntimeException(UUID.randomUUID().toString())
         );
 
         // noinspection ConstantConditions
         assertThrows(
           IllegalArgumentException.class,
-          () -> Validation.<RuntimeException, UUID, String>validationMap(testFailureMorphism)
-            .apply(_testSuccessMorphism)
+          () -> Validation.<RuntimeException, UUID, String>validationMap(testInvalidMorphism)
+            .apply(_testValidMorphism)
             .apply(testValidation)
         );
       }
 
       @Test
-      void shouldThrowExceptionForNullSuccessMorphism() {
-        final Function<UUID, String> testSuccessMorphism = null;
-        final Validation<RuntimeException, UUID> testValidation = Validation.success(UUID.randomUUID());
+      void shouldThrowExceptionForNullValidMorphism() {
+        final Function<UUID, String> testValidMorphism = null;
+        final Validation<RuntimeException, UUID> testValidation = Validation.valid(UUID.randomUUID());
 
         // noinspection ConstantConditions
         assertThrows(
           IllegalArgumentException.class,
-          () -> Validation.<RuntimeException, UUID, String>validationMap(_testFailureMorphism)
-            .apply(testSuccessMorphism)
+          () -> Validation.<RuntimeException, UUID, String>validationMap(_testInvalidMorphism)
+            .apply(testValidMorphism)
             .apply(testValidation)
         );
       }
@@ -433,34 +433,34 @@ class ValidationTests {
         // noinspection ConstantConditions
         assertThrows(
           IllegalArgumentException.class,
-          () -> Validation.<RuntimeException, UUID, String>validationMap(_testFailureMorphism)
-            .apply(_testSuccessMorphism)
+          () -> Validation.<RuntimeException, UUID, String>validationMap(_testInvalidMorphism)
+            .apply(_testValidMorphism)
             .apply(testValidation)
         );
       }
 
       @Test
-      void shouldReturnMappedValueForFailure() {
-        final Collection<RuntimeException> testFailureValues = Arrays.asList(
+      void shouldReturnMappedValueForInvalid() {
+        final Collection<RuntimeException> testInvalidValues = Arrays.asList(
           new RuntimeException(UUID.randomUUID().toString()),
           new RuntimeException(UUID.randomUUID().toString())
         );
-        final Validation<RuntimeException, UUID> testValidation = Validation.failure(testFailureValues);
-        final String expectedResult = _testFailureMorphism.apply(testFailureValues);
-        final String actualResult = Validation.<RuntimeException, UUID, String>validationMap(_testFailureMorphism)
-          .apply(_testSuccessMorphism)
+        final Validation<RuntimeException, UUID> testValidation = Validation.invalid(testInvalidValues);
+        final String expectedResult = _testInvalidMorphism.apply(testInvalidValues);
+        final String actualResult = Validation.<RuntimeException, UUID, String>validationMap(_testInvalidMorphism)
+          .apply(_testValidMorphism)
           .apply(testValidation);
 
         assertEquals(expectedResult, actualResult);
       }
 
       @Test
-      void shouldReturnMappedValueForSuccess() {
+      void shouldReturnMappedValueForValid() {
         final UUID testValue = UUID.randomUUID();
-        final Validation<RuntimeException, UUID> testValidation = Validation.success(testValue);
+        final Validation<RuntimeException, UUID> testValidation = Validation.valid(testValue);
         final String expectedResult = testValue.toString();
-        final String actualResult = Validation.<RuntimeException, UUID, String>validationMap(_testFailureMorphism)
-          .apply(_testSuccessMorphism)
+        final String actualResult = Validation.<RuntimeException, UUID, String>validationMap(_testInvalidMorphism)
+          .apply(_testValidMorphism)
           .apply(testValidation);
 
         assertEquals(expectedResult, actualResult);
@@ -469,9 +469,9 @@ class ValidationTests {
   }
 
   @Nested
-  class DescribeFailure {
-    private final String _testFailureValue = UUID.randomUUID().toString();
-    private final Validation<String, UUID> _testValidation = Validation.failure(_testFailureValue);
+  class DescribeInvalid {
+    private final String _testInvalidValue = UUID.randomUUID().toString();
+    private final Validation<String, UUID> _testValidation = Validation.invalid(_testInvalidValue);
 
     @Nested
     class DescribeEquals {
@@ -493,7 +493,7 @@ class ValidationTests {
 
       @Test
       void shouldReturnFalseForDifferingValues() {
-        final Validation<String, UUID> testOther = Validation.failure(UUID.randomUUID().toString());
+        final Validation<String, UUID> testOther = Validation.invalid(UUID.randomUUID().toString());
 
         // noinspection SimplifiableJUnitAssertion
         assertFalse(_testValidation.equals(testOther));
@@ -507,7 +507,7 @@ class ValidationTests {
 
       @Test
       void shouldReturnTrueForSameValue() {
-        final Validation<String, UUID> testOther = Validation.failure(_testFailureValue);
+        final Validation<String, UUID> testOther = Validation.invalid(_testInvalidValue);
 
         // noinspection SimplifiableJUnitAssertion
         assertTrue(_testValidation.equals(testOther));
@@ -518,32 +518,32 @@ class ValidationTests {
     class DescribeHashCode {
       @Test
       void shouldReturnDifferingHashCodeForDifferingValues() {
-        final Validation<String, UUID> testOther = Validation.failure(UUID.randomUUID().toString());
+        final Validation<String, UUID> testOther = Validation.invalid(UUID.randomUUID().toString());
 
         assertNotEquals(_testValidation.hashCode(), testOther.hashCode());
       }
 
       @Test
       void shouldReturnSameHashCodeForSameValues() {
-        final Validation<String, UUID> testOther = Validation.failure(_testFailureValue);
+        final Validation<String, UUID> testOther = Validation.invalid(_testInvalidValue);
 
         assertEquals(_testValidation.hashCode(), testOther.hashCode());
       }
     }
 
     @Nested
-    class DescribeIsFailure {
+    class DescribeIsInvalid {
       @Test
       void shouldReturnTrue() {
-        assertTrue(_testValidation.isFailure());
+        assertTrue(_testValidation.isInvalid());
       }
     }
 
     @Nested
-    class DescribeIsSuccess {
+    class DescribeIsValid {
       @Test
       void shouldReturnFalse() {
-        assertFalse(_testValidation.isSuccess());
+        assertFalse(_testValidation.isValid());
       }
     }
 
@@ -551,12 +551,12 @@ class ValidationTests {
     class DescribeToString {
       @Test
       void shouldReturnFormattedString() {
-        final Collection<String> testFailureValues = Arrays.asList(
+        final Collection<String> testInvalidValues = Arrays.asList(
           UUID.randomUUID().toString(),
           UUID.randomUUID().toString()
         );
-        final Validation<String, UUID> testValidation = Validation.failure(testFailureValues);
-        final String expectedResult = String.format("Failure([%s])", String.join(",", testFailureValues));
+        final Validation<String, UUID> testValidation = Validation.invalid(testInvalidValues);
+        final String expectedResult = String.format("Invalid([%s])", String.join(",", testInvalidValues));
         final String actualResult = testValidation.toString();
 
         assertEquals(expectedResult, actualResult);
@@ -565,9 +565,9 @@ class ValidationTests {
   }
 
   @Nested
-  class DescribeSuccess {
-    private final UUID _testSuccessValue = UUID.randomUUID();
-    private final Validation<String, UUID> _testValidation = Validation.success(_testSuccessValue);
+  class DescribeValid {
+    private final UUID _testValidValue = UUID.randomUUID();
+    private final Validation<String, UUID> _testValidation = Validation.valid(_testValidValue);
 
     @Nested
     class DescribeEquals {
@@ -589,7 +589,7 @@ class ValidationTests {
 
       @Test
       void shouldReturnFalseForDifferingValues() {
-        final Validation<String, UUID> testOther = Validation.success(UUID.randomUUID());
+        final Validation<String, UUID> testOther = Validation.valid(UUID.randomUUID());
 
         // noinspection SimplifiableJUnitAssertion
         assertFalse(_testValidation.equals(testOther));
@@ -603,7 +603,7 @@ class ValidationTests {
 
       @Test
       void shouldReturnTrueForSameValue() {
-        final Validation<String, UUID> testOther = Validation.success(_testSuccessValue);
+        final Validation<String, UUID> testOther = Validation.valid(_testValidValue);
 
         // noinspection SimplifiableJUnitAssertion
         assertTrue(_testValidation.equals(testOther));
@@ -614,32 +614,32 @@ class ValidationTests {
     class DescribeHashCode {
       @Test
       void shouldReturnDifferingHashCodeForDifferingValues() {
-        final Validation<String, UUID> testOther = Validation.success(UUID.randomUUID());
+        final Validation<String, UUID> testOther = Validation.valid(UUID.randomUUID());
 
         assertNotEquals(_testValidation.hashCode(), testOther.hashCode());
       }
 
       @Test
       void shouldReturnSameHashCodeForSameValues() {
-        final Validation<String, UUID> testOther = Validation.success(_testSuccessValue);
+        final Validation<String, UUID> testOther = Validation.valid(_testValidValue);
 
         assertEquals(_testValidation.hashCode(), testOther.hashCode());
       }
     }
 
     @Nested
-    class DescribeIsFailure {
+    class DescribeIsInvalid {
       @Test
       void shouldReturnFalse() {
-        assertFalse(_testValidation.isFailure());
+        assertFalse(_testValidation.isInvalid());
       }
     }
 
     @Nested
-    class DescribeIsSuccess {
+    class DescribeIsValid {
       @Test
       void shouldReturnTrue() {
-        assertTrue(_testValidation.isSuccess());
+        assertTrue(_testValidation.isValid());
       }
     }
 
@@ -648,8 +648,8 @@ class ValidationTests {
       @Test
       void shouldReturnFormattedString() {
         final UUID testValue = UUID.randomUUID();
-        final Validation<String, UUID> testValidation = Validation.success(testValue);
-        final String expectedResult = String.format("Success(%s)", testValue);
+        final Validation<String, UUID> testValidation = Validation.valid(testValue);
+        final String expectedResult = String.format("Valid(%s)", testValue);
         final String actualResult = testValidation.toString();
 
         assertEquals(expectedResult, actualResult);

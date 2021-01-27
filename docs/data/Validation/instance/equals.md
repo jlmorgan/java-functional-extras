@@ -8,8 +8,8 @@ Determines whether or not the `other` has the same value as the current `instanc
 
 ## Types
 
-* `A`: The underlying failure type.
-* `B`: The underlying success type.
+* `A`: The underlying invalid type.
+* `B`: The underlying valid type.
 
 ## Returns
 
@@ -18,18 +18,18 @@ Determines whether or not the `other` has the same value as the current `instanc
 ## Examples
 
 ```java
-Validation<String, String> failure = Validation.<String, String>failure("a");
-Validation<String, String> success = Validation.<String, String>success("a");
+Validation<String, String> invalid = Validation.<String, String>invalid("a");
+Validation<String, String> valid = Validation.<String, String>valid("a");
 
-success.equals("a");
+valid.equals("a");
 // => false
 
-success.equals(failure);
+valid.equals(invalid);
 // => false
 
-success.equals(Validation.<String, String>success("a"));
+valid.equals(Validation.<String, String>valid("a"));
 // => true
 
-failure.equals(Validation.<String, String>failure("a"));
+invalid.equals(Validation.<String, String>invalid("a"));
 // => true
 ```

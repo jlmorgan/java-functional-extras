@@ -16,12 +16,12 @@ import org.jetbrains.annotations.NotNull;
 import com.github.jlmorgan.Objects;
 
 /**
- * The {@link Validation} type is a right-biased disjunction that represents two possibilities: either a {@code Failure}
- * of {@code a} or a {@code Success} of {@code b}. By convention, the {@link Validation} is used to represent a value or
- * failure result of some function or process as a {@code Failure} of the failure message or a {@code Success} of the
+ * The {@link Validation} type is a right-biased disjunction that represents two possibilities: either a {@code Invalid}
+ * of {@code a} or a {@code Valid} of {@code b}. By convention, the {@link Validation} is used to represent a value or
+ * invalid result of some function or process as a {@code Invalid} of the invalid message or a {@code Valid} of the
  * value.
- * @param <A> The underlying failure type.
- * @param <B> The underlying success type.
+ * @param <A> The underlying invalid type.
+ * @param <B> The underlying valid type.
  */
 public interface Validation<A, B> {
   /**
@@ -34,14 +34,14 @@ public interface Validation<A, B> {
   }
 
   /**
-   * Concatenates two {@code Failure} values together, replacing a {@code Success} with the {@code Failure}; otherwise,
-   * take the first {@code Success}.
+   * Concatenates two {@code Invalid} values together, replacing a {@code Valid} with the {@code Invalid}; otherwise,
+   * take the first {@code Valid}.
    * @param second The second {@link Validation}.
    * @param first The first {@link Validation}.
-   * @param <F> The underlying failure type.
-   * @param <S> The underlying success type.
-   * @return The first {@code Success} for two successes, the first {@code Failure} for mixed; otherwise, a
-   * {@code Failure} of the concatenation of the failure values.
+   * @param <F> The underlying invalid type.
+   * @param <S> The underlying valid type.
+   * @return The first {@code Valid} for two valids, the first {@code Invalid} for mixed; otherwise, a
+   * {@code Invalid} of the concatenation of the invalid values.
    * @throws IllegalArgumentException if the either {@link Validation} is {@code null}.
    */
   static <F, S> Validation<F, S> concat(final Validation<F, S> second, final Validation<F, S> first) {
@@ -50,11 +50,11 @@ public interface Validation<A, B> {
 
     Validation<F, S> result = first;
 
-    if (first.isSuccess() && second.isFailure()) {
+    if (first.isValid() && second.isInvalid()) {
       result = second;
-    } else if (second.isFailure()) {
-      result = failure(Stream.of(first, second)
-        .map(fromFailure(emptyList()))
+    } else if (second.isInvalid()) {
+      result = invalid(Stream.of(first, second)
+        .map(fromInvalid(emptyList()))
         .flatMap(Collection::stream)
         .collect(Collectors.toList())
       );
@@ -64,141 +64,141 @@ public interface Validation<A, B> {
   }
 
   /**
-   * Creates a {@code Failure} from an arbitrary value.
+   * Creates a {@code Invalid} from an arbitrary value.
    * @param value The value.
-   * @param <F> The underlying failure type.
-   * @param <S> The underlying success type.
-   * @return A {@code Failure} of the value.
+   * @param <F> The underlying invalid type.
+   * @param <S> The underlying valid type.
+   * @return A {@code Invalid} of the value.
    */
   @NotNull
   @Contract(value = "_ -> new", pure = true)
-  static <F, S> Validation<F, S> failure(final F value) {
-    return new Failure<>(value);
+  static <F, S> Validation<F, S> invalid(final F value) {
+    return new Invalid<>(value);
   }
 
   /**
-   * Creates a {@code Failure} from an arbitrary collection of values.
+   * Creates a {@code Invalid} from an arbitrary collection of values.
    * @param values The values.
-   * @param <F> The underlying failure type.
-   * @param <S> The underlying success type.
-   * @return A {@code Failure} of the values.
+   * @param <F> The underlying invalid type.
+   * @param <S> The underlying valid type.
+   * @return A {@code Invalid} of the values.
    */
   @NotNull
   @Contract(value = "_ -> new", pure = true)
-  static <F, S> Validation<F, S> failure(final Collection<F> values) {
-    return new Failure<>(values);
+  static <F, S> Validation<F, S> invalid(final Collection<F> values) {
+    return new Invalid<>(values);
   }
 
   /**
-   * Extracts from a collection of {@link Validation} all of the {@code Failure} elements in extracted order. The
+   * Extracts from a collection of {@link Validation} all of the {@code Invalid} elements in extracted order. The
    * underlying collections are concatenated together.
    * @param collection The collection of {@link Validation}.
-   * @param <F> The underlying failure type.
-   * @param <S> The underlying success type.
-   * @return The collection of underlying {@code Failure} values.
+   * @param <F> The underlying invalid type.
+   * @param <S> The underlying valid type.
+   * @return The collection of underlying {@code Invalid} values.
    */
-  static <F, S> List<F> failures(final Collection<Validation<F, S>> collection) {
+  static <F, S> List<F> invalids(final Collection<Validation<F, S>> collection) {
     return Optional.ofNullable(collection)
       .map(Collection::stream)
       .orElseGet(Stream::empty)
       .filter(Objects::isNotNull)
-      .filter(Validation::isFailure)
-      .map(fromFailure(null))
+      .filter(Validation::isInvalid)
+      .map(fromInvalid(null))
       .flatMap(Collection::stream)
       .collect(Collectors.toList());
   }
 
   /**
-   * Curried implementation of {@link Validation#fromFailure(Collection, Validation)}.
+   * Curried implementation of {@link Validation#fromInvalid(Collection, Validation)}.
    */
   @NotNull
   @Contract(pure = true)
-  static <F, S> Function<Validation<F, S>, Collection<F>> fromFailure(final Collection<F> defaultValues) {
-    return validation -> fromFailure(defaultValues, validation);
+  static <F, S> Function<Validation<F, S>, Collection<F>> fromInvalid(final Collection<F> defaultValues) {
+    return validation -> fromInvalid(defaultValues, validation);
   }
 
   /**
-   * Extracts the value(s) of a {@code Failure}; otherwise, returns the {@code defaultValues}.
-   * @param defaultValues Values used if the {@code validation} is not a {@code Failure}.
+   * Extracts the value(s) of a {@code Invalid}; otherwise, returns the {@code defaultValues}.
+   * @param defaultValues Values used if the {@code validation} is not a {@code Invalid}.
    * @param validation The {@link Validation}.
-   * @param <F> The underlying failure type.
-   * @param <S> The underlying success type.
-   * @return The underlying failure value(s) or the defaults.
+   * @param <F> The underlying invalid type.
+   * @param <S> The underlying valid type.
+   * @return The underlying invalid value(s) or the defaults.
    */
   @Contract("_, null -> param1")
-  static <F, S> Collection<F> fromFailure(final Collection<F> defaultValues, final Validation<F, S> validation) {
-    return validation == null || validation.isSuccess()
+  static <F, S> Collection<F> fromInvalid(final Collection<F> defaultValues, final Validation<F, S> validation) {
+    return validation == null || validation.isValid()
       ? defaultValues
-      : ((Failure<F, S>) validation)._values;
+      : ((Invalid<F, S>) validation)._values;
   }
 
   /**
-   * Curried implementation of {@link Validation#fromSuccess(Object, Validation)}.
+   * Curried implementation of {@link Validation#fromValid(Object, Validation)}.
    */
   @NotNull
   @Contract(pure = true)
-  static <F, S> Function<Validation<F, S>, S> fromSuccess(final S defaultValue) {
-    return validation -> fromSuccess(defaultValue, validation);
+  static <F, S> Function<Validation<F, S>, S> fromValid(final S defaultValue) {
+    return validation -> fromValid(defaultValue, validation);
   }
 
   /**
-   * Extracts the value of a {@code Success}; otherwise, returns the {@code defaultValue}.
-   * @param defaultValue Value used if the {@code validation} is not a {@code Success}.
+   * Extracts the value of a {@code Valid}; otherwise, returns the {@code defaultValue}.
+   * @param defaultValue Value used if the {@code validation} is not a {@code Valid}.
    * @param validation The {@link Validation}.
-   * @param <F> The underlying failure type.
-   * @param <S> The underlying success type.
-   * @return The underlying success value or the default.
+   * @param <F> The underlying invalid type.
+   * @param <S> The underlying valid type.
+   * @return The underlying valid value or the default.
    */
   @Contract("_, null -> param1")
-  static <F, S> S fromSuccess(final S defaultValue, final Validation<F, S> validation) {
-    return validation == null || validation.isFailure()
+  static <F, S> S fromValid(final S defaultValue, final Validation<F, S> validation) {
+    return validation == null || validation.isInvalid()
       ? defaultValue
-      : ((Success<F, S>) validation)._value;
+      : ((Valid<F, S>) validation)._value;
   }
 
   /**
-   * Partitions a collection of {@link Validation} into two collections. All {@code Failure} elements are extracted, in
-   * order, to the first position of the output. Similarly for the {@code Success} elements in the second position.
+   * Partitions a collection of {@link Validation} into two collections. All {@code Invalid} elements are extracted, in
+   * order, to the first position of the output. Similarly for the {@code Valid} elements in the second position.
    * @param collection The collection of {@link Validation}.
-   * @param <F> The underlying failure type.
-   * @param <S> The underlying success type.
-   * @return A couple of a collection of the underlying {@code Failure} values and a collection of the underlying
-   * {@code Success} values.
+   * @param <F> The underlying invalid type.
+   * @param <S> The underlying valid type.
+   * @return A couple of a collection of the underlying {@code Invalid} values and a collection of the underlying
+   * {@code Valid} values.
    */
   @NotNull
   static <F, S> Tuple<Collection<F>, Collection<S>> partitionValidations(
     final Collection<Validation<F, S>> collection
   ) {
-    return Tuple.of(failures(collection), successes(collection));
+    return Tuple.of(invalids(collection), valids(collection));
   }
 
   /**
-   * Creates a {@code Success} from an arbitrary value.
+   * Creates a {@code Valid} from an arbitrary value.
    * @param value The value.
-   * @param <F> The underlying failure type.
-   * @param <S> The underlying success type.
-   * @return A {@code Success} of the value.
+   * @param <F> The underlying invalid type.
+   * @param <S> The underlying valid type.
+   * @return A {@code Valid} of the value.
    */
   @NotNull
   @Contract(value = "_ -> new", pure = true)
-  static <F, S> Validation<F, S> success(final S value) {
-    return new Success<>(value);
+  static <F, S> Validation<F, S> valid(final S value) {
+    return new Valid<>(value);
   }
 
   /**
-   * Extracts from a collection of {@link Validation} all of the {@code Success} elements in extracted order.
+   * Extracts from a collection of {@link Validation} all of the {@code Valid} elements in extracted order.
    * @param collection The collection of {@link Validation}.
-   * @param <F> The underlying failure type.
-   * @param <S> The underlying success type.
-   * @return The collection of underlying {@code Success} values.
+   * @param <F> The underlying invalid type.
+   * @param <S> The underlying valid type.
+   * @return The collection of underlying {@code Valid} values.
    */
-  static <F, S> Collection<S> successes(final Collection<Validation<F, S>> collection) {
+  static <F, S> Collection<S> valids(final Collection<Validation<F, S>> collection) {
     return Optional.ofNullable(collection)
       .map(Collection::stream)
       .orElseGet(Stream::empty)
       .filter(Objects::isNotNull)
-      .filter(Validation::isSuccess)
-      .map(fromSuccess(null))
+      .filter(Validation::isValid)
+      .map(fromValid(null))
       .collect(Collectors.toList());
   }
 
@@ -208,7 +208,7 @@ public interface Validation<A, B> {
   @NotNull
   @Contract(pure = true)
   static <F, S> Function<F, Function<S, Validation<F, S>>> validate(final Predicate<S> predicate) {
-    return failureValue -> validate(predicate, failureValue);
+    return invalidValue -> validate(predicate, invalidValue);
   }
 
   /**
@@ -216,25 +216,25 @@ public interface Validation<A, B> {
    */
   @NotNull
   @Contract(pure = true)
-  static <F, S> Function<S, Validation<F, S>> validate(final Predicate<S> predicate, final F failureValue) {
-    return value -> validate(predicate, failureValue, value);
+  static <F, S> Function<S, Validation<F, S>> validate(final Predicate<S> predicate, final F invalidValue) {
+    return value -> validate(predicate, invalidValue, value);
   }
 
   /**
-   * Validates a value {@code b} and a {@code Success} of {@code b} if the {@code predicate} returns
-   * {@code true}; otherwise, a {@code Failure} of {@code a}.
+   * Validates a value {@code b} and a {@code Valid} of {@code b} if the {@code predicate} returns
+   * {@code true}; otherwise, a {@code Invalid} of {@code a}.
    * @param predicate The predicate.
-   * @param failureValue The failure value.
+   * @param invalidValue The invalid value.
    * @param value The value to test.
-   * @param <F> The underlying failure type.
-   * @param <S> The underlying success type.
-   * @return A {@code Success} of the {@code value} if the {@code predicate} returns {@code true}; otherwise, a
-   * {@code Failure} of {@code failureValue}.
+   * @param <F> The underlying invalid type.
+   * @param <S> The underlying valid type.
+   * @return A {@code Valid} of the {@code value} if the {@code predicate} returns {@code true}; otherwise, a
+   * {@code Invalid} of {@code invalidValue}.
    */
-  static <F, S> Validation<F, S> validate(final Predicate<S> predicate, final F failureValue, final S value) {
+  static <F, S> Validation<F, S> validate(final Predicate<S> predicate, final F invalidValue, final S value) {
     return requireNonNull(predicate, "predicate must not be null").test(value)
-      ? success(value)
-      : failure(failureValue);
+      ? valid(value)
+      : invalid(invalidValue);
   }
 
   /**
@@ -243,9 +243,9 @@ public interface Validation<A, B> {
   @NotNull
   @Contract(pure = true)
   static <F, S, C> Function<Function<S, C>, Function<Validation<F, S>, C>> validationMap(
-    final Function<? super Collection<F>, ? extends C> failureMorphism
+    final Function<? super Collection<F>, ? extends C> invalidMorphism
   ) {
-    return successMorphism -> validationMap(failureMorphism, successMorphism);
+    return validMorphism -> validationMap(invalidMorphism, validMorphism);
   }
 
   /**
@@ -254,64 +254,64 @@ public interface Validation<A, B> {
   @NotNull
   @Contract(pure = true)
   static <F, S, C> Function<Validation<F, S>, C> validationMap(
-    final Function<? super Collection<F>, ? extends C> failureMorphism,
-    final Function<? super S, ? extends C> successMorphism
+    final Function<? super Collection<F>, ? extends C> invalidMorphism,
+    final Function<? super S, ? extends C> validMorphism
   ) {
-    return validation -> validationMap(failureMorphism, successMorphism, validation);
+    return validation -> validationMap(invalidMorphism, validMorphism, validation);
   }
 
   /**
-   * Provides a catamorphism of the {@code validation} to a singular value. If the value is {@code Failure f}, apply the
+   * Provides a catamorphism of the {@code validation} to a singular value. If the value is {@code Invalid f}, apply the
    * first function to {@code f}; otherwise, apply the second function to {@code s}.
-   * @param failureMorphism Maps the values of a {@code Failure a} to {@code c}.
-   * @param successMorphism Maps the value of a {@code Success b} to {@code c}.
+   * @param invalidMorphism Maps the values of a {@code Invalid a} to {@code c}.
+   * @param validMorphism Maps the value of a {@code Valid b} to {@code c}.
    * @param validation The {@link Validation}.
-   * @param <F> The underlying failure type.
-   * @param <S> The underlying success type.
+   * @param <F> The underlying invalid type.
+   * @param <S> The underlying valid type.
    * @param <C> The return type.
    * @return The result of the catamorphism of the {@code validation}.
-   * @throws IllegalArgumentException if the {@code failureMorphism}, {@code successMorphism}, or {@code validation} is
+   * @throws IllegalArgumentException if the {@code invalidMorphism}, {@code validMorphism}, or {@code validation} is
    * {@code null}.
    */
   static <F, S, C> C validationMap(
-    final Function<? super Collection<F>, ? extends C> failureMorphism,
-    final Function<? super S, ? extends C> successMorphism,
+    final Function<? super Collection<F>, ? extends C> invalidMorphism,
+    final Function<? super S, ? extends C> validMorphism,
     final Validation<F, S> validation
   ) {
-    return requireNonNull(validation, "validation must not be null").isSuccess()
-      ? requireNonNull(successMorphism, "successMorphism must not be null")
-        .apply(fromSuccess(null, validation))
-      : requireNonNull(failureMorphism, "failureMorphism must not be null")
-        .apply(fromFailure(emptyList(), validation));
+    return requireNonNull(validation, "validation must not be null").isValid()
+      ? requireNonNull(validMorphism, "validMorphism must not be null")
+        .apply(fromValid(null, validation))
+      : requireNonNull(invalidMorphism, "invalidMorphism must not be null")
+        .apply(fromInvalid(emptyList(), validation));
   }
 
   /**
-   * Determines whether or not the instance is a {@code Failure}.
-   * @return {@code true} for a {@code Failure}; otherwise, {@code false}.
+   * Determines whether or not the instance is a {@code Invalid}.
+   * @return {@code true} for a {@code Invalid}; otherwise, {@code false}.
    */
-  default boolean isFailure() {
-    return !isSuccess();
+  default boolean isInvalid() {
+    return !isValid();
   }
 
   /**
-   * Determines whether or not the instance is a {@code Success}.
-   * @return {@code true} for a {@code Success}; otherwise, {@code false}.
+   * Determines whether or not the instance is a {@code Valid}.
+   * @return {@code true} for a {@code Valid}; otherwise, {@code false}.
    */
-  boolean isSuccess();
+  boolean isValid();
 
   /**
-   * Encapsulates the failure value(s) of the disjunction.
-   * @param <A> The underlying failure type.
-   * @param <B> The underlying success type.
+   * Encapsulates the invalid value(s) of the disjunction.
+   * @param <A> The underlying invalid type.
+   * @param <B> The underlying valid type.
    */
-  class Failure<A, B> implements Validation<A, B> {
+  class Invalid<A, B> implements Validation<A, B> {
     private final Collection<A> _values;
 
-    Failure(final A value) {
+    Invalid(final A value) {
       _values = singletonList(value);
     }
 
-    Failure(final Collection<A> values) {
+    Invalid(final Collection<A> values) {
       _values = Optional.ofNullable(values)
         .orElseGet(Collections::emptyList);
     }
@@ -329,9 +329,9 @@ public interface Validation<A, B> {
       if (this == other) {
         result = true;
       } else if (other != null && getClass() == other.getClass()) {
-        final Failure<?, ?> failure = (Failure<?, ?>) other;
+        final Invalid<?, ?> invalid = (Invalid<?, ?>) other;
 
-        result = _values.equals(failure._values);
+        result = _values.equals(invalid._values);
       }
 
       return result;
@@ -347,11 +347,11 @@ public interface Validation<A, B> {
     }
 
     /**
-     * Determines whether or not the instance is a {@code Success}.
-     * @return {@code true} for a {@code Success}; otherwise, {@code false}.
+     * Determines whether or not the instance is a {@code Valid}.
+     * @return {@code true} for a {@code Valid}; otherwise, {@code false}.
      */
     @Override
-    public boolean isSuccess() {
+    public boolean isValid() {
       return false;
     }
 
@@ -363,7 +363,7 @@ public interface Validation<A, B> {
     @Override
     public String toString() {
       return String.format(
-        "Failure([%s])",
+        "Invalid([%s])",
         _values.stream()
           .map(Object::toString)
           .collect(Collectors.joining(","))
@@ -372,14 +372,14 @@ public interface Validation<A, B> {
   }
 
   /**
-   * Encapsulates the success value of the disjunction.
-   * @param <A> The underlying failure type.
-   * @param <B> The underlying success type.
+   * Encapsulates the valid value of the disjunction.
+   * @param <A> The underlying invalid type.
+   * @param <B> The underlying valid type.
    */
-  class Success<A, B> implements Validation<A, B> {
+  class Valid<A, B> implements Validation<A, B> {
     private final B _value;
 
-    Success(final B value) {
+    Valid(final B value) {
       _value = value;
     }
 
@@ -396,9 +396,9 @@ public interface Validation<A, B> {
       if (this == other) {
         result = true;
       } else if (other != null && getClass() == other.getClass()) {
-        final Success<?, ?> success = (Success<?, ?>) other;
+        final Valid<?, ?> valid = (Valid<?, ?>) other;
 
-        result = _value.equals(success._value);
+        result = _value.equals(valid._value);
       }
 
       return result;
@@ -414,11 +414,11 @@ public interface Validation<A, B> {
     }
 
     /**
-     * Determines whether or not the instance is a {@code Success}.
-     * @return {@code true} for a {@code Success}; otherwise, {@code false}.
+     * Determines whether or not the instance is a {@code Valid}.
+     * @return {@code true} for a {@code Valid}; otherwise, {@code false}.
      */
     @Override
-    public boolean isSuccess() {
+    public boolean isValid() {
       return true;
     }
 
@@ -428,7 +428,7 @@ public interface Validation<A, B> {
      */
     @Override
     public String toString() {
-      return String.format("Success(%s)", _value);
+      return String.format("Valid(%s)", _value);
     }
   }
 }

@@ -4,8 +4,8 @@ Converts the `instance` to a `String` representation.
 
 ## Types
 
-* `A`: The underlying failure type.
-* `B`: The underlying success type.
+* `A`: The underlying invalid type.
+* `B`: The underlying valid type.
 
 ## Returns
 
@@ -14,9 +14,9 @@ Converts the `instance` to a `String` representation.
 ## Examples
 
 ```java
-Validation.<String, String>failure("a").toString();
-// => "Failure(a)"
+Validation.<String, String>invalid("a").toString();
+// => "Invalid(a)"
 
-Validation.<String, String>success("a").toString();
-// => "Success(a)"
+Validation.<String, String>valid("a").toString();
+// => "Valid(a)"
 ```

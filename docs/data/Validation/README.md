@@ -1,21 +1,21 @@
 # `Validation`
 
-The `Validation` type is a right-biased disjunction that represents two possibilities: either a `Failure` of `a` or a `Success` of `b`. By convention, the `Validation` is used to represent a value or failure result of some function or process as a `Failure` of the failure message or a `Success` of the value.
+The `Validation` type is a right-biased disjunction that represents two possibilities: either a `Invalid` of `a` or a `Valid` of `b`. By convention, the `Validation` is used to represent a value or invalid result of some function or process as a `Invalid` of the invalid message or a `Valid` of the value.
 
 * [Constructors](./constructors)
-    * [`.failure`](./constructors/failure.md)
-    * [`.success`](./constructors/success.md)
+    * [`.invalid`](./constructors/invalid.md)
+    * [`.valid`](./constructors/valid.md)
 * [Static Methods](./static)
     * [`.concat`](./static/concat.md)
-    * [`.failures`](./static/failures.md)
-    * [`.fromFailure`](./static/fromFailure.md)
-    * [`.fromSuccess`](./static/fromSuccess.md)
+    * [`.fromInvalid`](./static/fromInvalid.md)
+    * [`.fromValid`](./static/fromValid.md)
+    * [`.invalids`](./static/invalids.md)
     * [`.partitionValidations`](./static/partitionValidations.md)
-    * [`.successes`](./static/successes.md)
     * [`.validate`](./static/validate.md)
     * [`.validationMap`](./static/validationMap.md)
+    * [`.valids`](./static/valids.md)
 * [Instance Methods](./instance)
     * [`#equals`](./instance/equals.md)
-    * [`#isFailure`](./instance/isFailure.md)
-    * [`#isSuccess`](./instance/isSuccess.md)
+    * [`#isInvalid`](./instance/isInvalid.md)
+    * [`#isValid`](./instance/isValid.md)
     * [`#toString`](./instance/toString.md)
